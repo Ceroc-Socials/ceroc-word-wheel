@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>THE CEROC WORD WHEEL</title>
 
-    <!-- Open Graph / Facebook / WhatsApp Preview Meta Tags -->
+    <!-- Strict Referrer & Privacy Policy Meta -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Open Graph / Social Preview Meta Tags -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://glowsocial-uk.github.io/ceroc-word-wheel/" />
     <meta property="og:title" content="THE CEROC WORD WHEEL" />
@@ -14,104 +17,610 @@
     <meta property="og:image:secure_url" content="https://glowsocial-uk.github.io/ceroc-word-wheel/circular-logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Official Ceroc Brand Fonts: Bebas Neue & Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Tone.js for Synthesized Sound Effects -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        ceroc: {
-                            orange: '#F87B03',      /* Official Ceroc Dark Orange */
-                            lightOrange: '#FFA956', /* Official Ceroc Light Orange */
-                            highlight: '#D6336C',   /* Official Ceroc.com Highlight Pink */
-                            black: '#000000',
-                            white: '#FFFFFF'
-                        }
-                    },
-                    fontFamily: {
-                        display: ['"Bebas Neue"', 'sans-serif'],
-                        body: ['"Montserrat"', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
+        /* ==========================================================================
+           1. SELF-HOSTED BRAND FONTS (ZERO GOOGLE CDN IP LEAKS FOR GDPR COMPLIANCE)
+           Upload BebasNeue-Regular.woff2 and Montserrat-Variable.woff2 to your repo
+           for 100% local font loading, or rely on the clean high-impact fallbacks.
+           ========================================================================== */
+        @font-face {
+            font-family: 'Bebas Neue';
+            src: local('Bebas Neue'), local('BebasNeue-Regular'), url('./BebasNeue-Regular.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: local('Montserrat'), url('./Montserrat-Variable.woff2') format('woff2');
+            font-weight: 100 900;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --ceroc-orange: #F87B03;
+            --ceroc-light-orange: #FFA956;
+            --ceroc-highlight: #D6336C;
+            --ceroc-black: #000000;
+            --ceroc-white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #000000;
-            color: #FFFFFF;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--ceroc-black);
+            color: var(--ceroc-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             overflow-x: hidden;
             user-select: none;
             -webkit-user-select: none;
             touch-action: manipulation;
-        }
-
-        .font-display {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 0.04em;
-        }
-
-        /* Brand-compliant dark background with bottom-to-top dark gradient */
-        .ceroc-bg {
             background:
                 linear-gradient(to top, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.80) 55%, rgba(0, 0, 0, 0.92) 100%),
                 radial-gradient(circle at 50% 25%, rgba(248, 123, 3, 0.25) 0%, rgba(214, 51, 108, 0.08) 45%, #000000 80%);
         }
 
-        /* Wheel Ring */
+        .font-display {
+            font-family: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        /* Layout Containers */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0.75rem 1rem;
+        }
+
+        .glass-panel {
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 1rem;
+            padding: 1.15rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Top Utility Bar */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 0.5rem;
+            gap: 0.5rem;
+        }
+
+        .pill-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--ceroc-light-orange);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.4rem 0.85rem;
+            border-radius: 9999px;
+            font-family: inherit;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+        .pill-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+        .pill-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Official Ceroc Header Stack */
+        .header-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 0.75rem auto;
+        }
+
+        .title-block {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-title {
+            font-size: clamp(2.6rem, 7vw, 4.2rem);
+            line-height: 0.95;
+            color: var(--ceroc-white);
+            font-weight: 700;
+        }
+
+        .title-underline {
+            width: 100%;
+            height: 2px;
+            background-color: var(--ceroc-white);
+            margin: 0.55rem 0;
+        }
+
+        .strapline {
+            font-size: clamp(0.72rem, 2vw, 0.88rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--ceroc-white);
+        }
+
+        .detail-line {
+            font-size: clamp(0.75rem, 2vw, 0.88rem);
+            font-weight: 400;
+            color: var(--ceroc-light-orange);
+            margin-top: 0.25rem;
+        }
+
+        /* Score & Progress Panel */
+        .score-bar {
+            max-width: 680px;
+            margin: 0 auto 1rem auto;
+        }
+
+        .score-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-orange {
+            background-color: var(--ceroc-orange);
+            color: var(--ceroc-white);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.25rem 0.65rem;
+            border-radius: 0.3rem;
+        }
+
+        .badge-bonus {
+            background-color: var(--ceroc-light-orange);
+            color: var(--ceroc-black);
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.25rem 0.65rem;
+            border-radius: 0.3rem;
+        }
+
+        .progress-track {
+            position: relative;
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--ceroc-orange);
+            border-radius: 9999px;
+            transition: width 0.4s ease-out;
+        }
+
+        .marker {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        .tier-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.62rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-top: 0.35rem;
+        }
+
+        /* Responsive Two-Column Game Grid */
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+            align-items: start;
+        }
+        @media (min-width: 900px) {
+            .game-grid {
+                grid-template-columns: 7fr 5fr;
+            }
+        }
+
+        /* Wheel & Controls */
+        .wheel-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .toast-slot {
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .toast-msg {
+            padding: 0.25rem 0.85rem;
+            border-radius: 0.35rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .toast-msg.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .word-slot {
+            width: 100%;
+            max-width: 320px;
+            min-height: 54px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .word-placeholder {
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .letter-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 33px;
+            height: 38px;
+            border-radius: 0.45rem;
+            font-size: 1.55rem;
+            animation: popIn 0.14s ease-out forwards;
+        }
+
+        /* Interactive Wheel */
+        .wheel-box {
+            position: relative;
+            width: 290px;
+            height: 290px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0.25rem 0;
+        }
+        @media (min-width: 480px) {
+            .wheel-box {
+                width: 310px;
+                height: 310px;
+            }
+        }
+
         .wheel-ring {
+            position: absolute;
+            inset: 12px;
+            border-radius: 50%;
             background: radial-gradient(circle, rgba(248, 123, 3, 0.18) 0%, rgba(0, 0, 0, 0.9) 70%, rgba(255, 169, 86, 0.22) 100%);
             box-shadow: 0 0 25px rgba(248, 123, 3, 0.3), inset 0 0 20px rgba(248, 123, 3, 0.2);
             border: 2px solid rgba(255, 169, 86, 0.6);
+            pointer-events: none;
         }
 
-        /* Outer Letter Tile */
+        .wheel-inner-ring {
+            position: absolute;
+            inset: 24px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+        }
+
+        .wheel-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
         .letter-node {
-            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, color 0.15s ease;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--ceroc-white);
+            color: var(--ceroc-black);
+            border: 2px solid var(--ceroc-white);
+            font-size: 2.35rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            transform: translate(-50%, -50%);
+            transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.14s ease, color 0.14s ease;
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
         }
-
         .letter-node:active {
             transform: translate(-50%, -50%) scale(0.92) !important;
         }
-
         .letter-node.selected {
-            background-color: #F87B03 !important;
-            color: #FFFFFF !important;
+            background-color: var(--ceroc-orange) !important;
+            color: var(--ceroc-white) !important;
             box-shadow: 0 0 18px rgba(248, 123, 3, 0.85);
             transform: translate(-50%, -50%) scale(1.08);
-            border: 2px solid #FFFFFF;
         }
 
-        /* Center Mandatory Letter Tile */
         .center-node {
-            background-color: #F87B03;
-            border: 3px solid #FFFFFF;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background-color: var(--ceroc-orange);
+            color: var(--ceroc-white);
+            border: 3px solid var(--ceroc-white);
+            font-size: 3.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 25;
             box-shadow: 0 0 22px rgba(248, 123, 3, 0.75);
-            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
+            transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.14s ease;
         }
-
         .center-node.selected {
-            background-color: #FFFFFF;
-            color: #000000 !important;
-            border-color: #F87B03;
+            background-color: var(--ceroc-white);
+            color: var(--ceroc-black) !important;
+            border-color: var(--ceroc-orange);
             box-shadow: 0 0 28px rgba(255, 169, 86, 1);
             transform: translate(-50%, -50%) scale(1.1);
         }
 
-        /* Shake Animation for Invalid Words */
+        .centre-tag {
+            position: absolute;
+            bottom: -6px;
+            background: var(--ceroc-white);
+            color: var(--ceroc-black);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.55rem;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 4px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* Action Buttons Row */
+        .action-grid {
+            width: 100%;
+            max-width: 360px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-ctrl {
+            padding: 0.75rem 0.4rem;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--ceroc-white);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-family: inherit;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+        .btn-ctrl:hover {
+            background: rgba(255, 255, 255, 0.16);
+        }
+        .btn-ctrl:active {
+            transform: scale(0.96);
+        }
+
+        .btn-enter {
+            background: var(--ceroc-highlight);
+            border-color: var(--ceroc-highlight);
+            font-weight: 700;
+        }
+        .btn-enter:hover {
+            background: #bf2b5f;
+        }
+
+        .hint-bar {
+            width: 100%;
+            max-width: 360px;
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.72rem;
+        }
+
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .words-list {
+            min-height: 120px;
+            max-height: 190px;
+            overflow-y: auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 0.38rem;
+            padding: 0.25rem 0;
+        }
+
+        .word-pill {
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.3rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .word-pill.bonus {
+            background: var(--ceroc-orange);
+            color: var(--ceroc-white);
+            font-weight: 800;
+            border-color: var(--ceroc-white);
+        }
+
+        /* Bottom Milestone Banner */
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+        @media (min-width: 700px) {
+            .milestone-grid {
+                grid-template-columns: 5fr 7fr;
+            }
+        }
+
+        .ranks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .rank-row {
+            padding: 0.45rem 0.65rem;
+            border-radius: 0.45rem;
+            color: rgba(255, 255, 255, 0.75);
+            transition: all 0.2s ease;
+        }
+        .rank-row.unlocked {
+            background: rgba(248, 123, 3, 0.2);
+            border: 1px solid var(--ceroc-orange);
+            color: var(--ceroc-white);
+            font-weight: 700;
+        }
+
+        /* Footer & Modals */
+        .footer-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            text-align: center;
+        }
+        @media (min-width: 640px) {
+            .footer-bar {
+                flex-direction: row;
+                text-align: left;
+            }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            max-width: 460px;
+            width: 100%;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            position: relative;
+            color: var(--ceroc-white);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--ceroc-white);
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-7px); }
@@ -121,319 +630,238 @@
             animation: shake 0.35s ease-in-out;
         }
 
-        /* Pop Animation for Letter Entry */
         @keyframes popIn {
             0% { transform: scale(0.6); opacity: 0; }
             80% { transform: scale(1.1); }
             100% { transform: scale(1); opacity: 1; }
         }
-        .letter-pop {
-            animation: popIn 0.15s ease-out forwards;
-        }
 
-        /* Custom Scrollbar for Found Words */
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(248, 123, 3, 0.55);
-            border-radius: 8px;
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
-<body class="ceroc-bg min-h-screen flex flex-col justify-between relative selection:bg-ceroc-orange selection:text-white">
+<body>
 
-    <!-- Background Starry Particle Canvas -->
-    <canvas id="sparkleCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+    <!-- Background Sparkle & Confetti Canvases -->
+    <canvas id="sparkleCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></canvas>
+    <canvas id="confettiCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:50;"></canvas>
 
-    <!-- Celebration Confetti Canvas -->
-    <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
-
-    <!-- Top Navigation / Utility Controls + Official Centered Logo -->
-    <header class="relative z-10 w-full max-w-4xl mx-auto px-4 pt-4 pb-2 flex flex-col items-center">
-        <!-- Top Utility Bar (Sound Toggle & Quick Rules Button) -->
-        <div class="w-full flex items-center justify-between mb-1">
-            <button id="soundToggleBtn" onclick="toggleSound()" class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 text-ceroc-lightOrange text-[11px] font-semibold uppercase tracking-wider transition">
+    <!-- Header Section -->
+    <header class="container">
+        <div class="top-bar">
+            <button id="soundToggleBtn" onclick="toggleSound()" class="pill-btn">
                 <span id="soundText">Sound: On</span>
             </button>
-
-            <button onclick="toggleRulesModal()" class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 text-ceroc-lightOrange text-[11px] font-semibold uppercase tracking-wider transition">
-                <span>Rules</span>
-            </button>
+            <div style="display:flex;gap:0.4rem;">
+                <button onclick="togglePrivacyModal()" class="pill-btn">
+                    Privacy & Data
+                </button>
+                <button onclick="toggleRulesModal()" class="pill-btn">
+                    Rules
+                </button>
+            </div>
         </div>
 
-        <!-- OFFICIAL CEROC HEADER STACK (Centralised within Mobile Safe Zone) -->
-        <!-- 1. Official Round Black Circle Ceroc Logo (Clear space around it, zero added effects) -->
-        <div class="mb-3">
+        <!-- OFFICIAL CEROC HEADER STACK -->
+        <div class="header-stack">
             <img
                 src="./circular-logo.png"
                 alt="Ceroc"
-                class="w-20 h-20 rounded-full object-contain mx-auto"
-                onerror="this.outerHTML='<div class=\'w-20 h-20 rounded-full bg-black border border-white/25 flex items-center justify-center font-display text-2xl tracking-widest text-white\'>CEROC</div>'"
+                class="logo-img"
+                onerror="this.outerHTML='<div style=\'width:80px;height:80px;border-radius:50%;background:#000;border:1px solid rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem auto;\' class=\'font-display\'>CEROC</div>'"
             />
+
+            <div class="title-block">
+                <h1 class="font-display main-title">THE CEROC WORD WHEEL</h1>
+                <div class="title-underline"></div>
+            </div>
+
+            <p class="strapline">GIVE YOUR BRAIN A LITTLE WORKOUT!</p>
+            <p class="detail-line">Bonus Challenge: Find the 9-letter word connected to Ceroc!</p>
         </div>
-
-        <!-- 2. Main Title: Bebas Neue Bold, ALL CAPS, White -->
-        <!-- 3. Horizontal White Underline: Exact same width as Title, equally spaced vertically -->
-        <div class="inline-flex flex-col items-center text-center">
-            <h1 class="font-display text-5xl sm:text-6xl md:text-7xl text-white uppercase leading-none tracking-wide">
-                THE CEROC WORD WHEEL
-            </h1>
-            <div class="w-full h-[2px] bg-white my-2.5"></div>
-        </div>
-
-        <!-- 4. Strapline: Montserrat Semi-Bold, ALL CAPS, White -->
-        <p class="font-body font-semibold text-xs sm:text-sm text-white uppercase tracking-widest text-center">
-            GIVE YOUR BRAIN A LITTLE WORKOUT!
-        </p>
-
-        <!-- 5. Further Detail Line: Montserrat, Title Case, Light Orange (#FFA956) -->
-        <p class="font-body font-normal text-xs sm:text-sm text-ceroc-lightOrange mt-1 text-center">
-            Bonus Challenge: Find the 9-letter word connected to Ceroc!
-        </p>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="relative z-10 w-full max-w-4xl mx-auto px-4 py-2 flex-grow flex flex-col items-center">
+    <!-- Main Game Content -->
+    <main class="container" style="flex-grow:1;">
 
-        <!-- Live Score & Rank Progress Bar -->
-        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 mb-4 shadow-lg">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-2">
-                    <span class="bg-ceroc-orange text-white font-bold text-xs uppercase tracking-wider px-2.5 py-1 rounded">
-                        <span id="rankBadgeText">STARTING OUT</span>
-                    </span>
-                    <span id="bonusBadge" class="hidden bg-ceroc-lightOrange text-black font-extrabold text-xs uppercase tracking-wider px-2.5 py-1 rounded animate-pulse">
-                        9-LETTER BONUS FOUND!
-                    </span>
+        <!-- Score & Rank Progression Bar -->
+        <div class="glass-panel score-bar">
+            <div class="score-top">
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                    <span class="badge-orange" id="rankBadgeText">STARTING OUT</span>
+                    <span id="bonusBadge" class="badge-bonus hidden">9-LETTER BONUS FOUND!</span>
                 </div>
-                <div class="text-right text-xs">
-                    <span class="text-white/70 uppercase tracking-wider font-semibold">Words Found:</span>
-                    <span id="wordCountDisplay" class="font-extrabold text-ceroc-orange text-base ml-1">0</span>
-                    <span class="text-white/50">/ <span id="totalPossibleDisplay">85</span></span>
+                <div style="font-size:0.75rem;">
+                    <span style="color:rgba(255,255,255,0.7);text-transform:uppercase;font-weight:600;">Words Found:</span>
+                    <strong id="wordCountDisplay" style="color:var(--ceroc-orange);font-size:1rem;margin-left:0.25rem;">0</strong>
+                    <span style="color:rgba(255,255,255,0.5);">/ <span id="totalPossibleDisplay">85</span></span>
                 </div>
             </div>
 
-            <!-- Tier Progress Bar with Markers (10, 25, 40, 60) -->
-            <div class="relative w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
-                <div id="progressBarFill" class="h-full bg-ceroc-orange transition-all duration-500 ease-out w-0 rounded-full"></div>
-                <div class="absolute top-0 bottom-0 left-[16.6%] w-0.5 bg-black/70" title="10: Warming Up"></div>
-                <div class="absolute top-0 bottom-0 left-[41.6%] w-0.5 bg-black/70" title="25: In the Groove"></div>
-                <div class="absolute top-0 bottom-0 left-[66.6%] w-0.5 bg-black/70" title="40: Word Wheel Legend"></div>
+            <div class="progress-track">
+                <div id="progressBarFill" class="progress-fill"></div>
+                <div class="marker" style="left:16.6%;" title="10: Warming Up"></div>
+                <div class="marker" style="left:41.6%;" title="25: In the Groove"></div>
+                <div class="marker" style="left:66.6%;" title="40: Word Wheel Legend"></div>
             </div>
-            <div class="flex justify-between text-[10px] text-white/60 mt-1.5 font-semibold uppercase tracking-wider px-0.5">
+
+            <div class="tier-labels">
                 <span>0</span>
-                <span id="tier10Label">10+ Warming Up</span>
-                <span id="tier25Label">25+ Groove</span>
-                <span id="tier40Label">40+ Legend</span>
-                <span id="tier60Label">60+ Wizard!</span>
+                <span>10+ Warming Up</span>
+                <span>25+ Groove</span>
+                <span>40+ Legend</span>
+                <span>60+ Wizard!</span>
             </div>
         </div>
 
-        <!-- Two-Column Responsive Game Area -->
-        <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <!-- Two-Column Game Area -->
+        <div class="game-grid">
 
-            <!-- Left Column: Interactive Word Wheel & Controls -->
-            <div class="lg:col-span-7 flex flex-col items-center bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 shadow-2xl">
-
-                <!-- Dynamic Toast / Feedback Message -->
-                <div class="h-7 flex items-center justify-center mb-1">
-                    <div id="feedbackToast" class="px-3.5 py-1 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 opacity-0 transform -translate-y-1">
-                         
-                    </div>
+            <!-- Left Column: Interactive Wheel -->
+            <div class="glass-panel wheel-section">
+                <div class="toast-slot">
+                    <div id="feedbackToast" class="toast-msg"> </div>
                 </div>
 
-                <!-- Current Word Display Slot -->
-                <div id="currentWordBox" class="w-full max-w-xs min-h-[54px] bg-white/5 border border-white/20 rounded-xl px-4 py-2 mb-4 flex items-center justify-center gap-1">
-                    <span id="currentWordPlaceholder" class="text-white/35 text-xs font-semibold uppercase tracking-widest select-none">
-                        TAP LETTERS OR TYPE...
-                    </span>
-                    <div id="currentWordLetters" class="flex items-center justify-center gap-1 flex-wrap"></div>
+                <div id="currentWordBox" class="word-slot">
+                    <span id="currentWordPlaceholder" class="word-placeholder">TAP LETTERS OR TYPE...</span>
+                    <div id="currentWordLetters" style="display:flex;align-items:center;justify-content:center;gap:0.25rem;flex-wrap:wrap;"></div>
                 </div>
 
-                <!-- Interactive Wheel Container -->
-                <div class="relative w-[280px] h-[280px] sm:w-[310px] sm:h-[310px] flex items-center justify-center my-1">
+                <div class="wheel-box">
+                    <div class="wheel-ring"></div>
+                    <div class="wheel-inner-ring"></div>
 
-                    <!-- Outer Ring -->
-                    <div class="wheel-ring absolute inset-3 rounded-full pointer-events-none"></div>
-                    <div class="absolute inset-6 rounded-full border border-white/15 pointer-events-none"></div>
-
-                    <!-- SVG Spoke Lines & Active Selection Trail -->
-                    <svg id="wheelSvg" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 300">
-                        <!-- Static White Spokes from Center (150,150) to 8 Outer Nodes -->
+                    <svg id="wheelSvg" class="wheel-svg" viewBox="0 0 300 300">
                         <g id="staticSpokes" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.85"></g>
-                        <!-- Dynamic Selection Trail -->
                         <polyline id="selectionPolyline" fill="none" stroke="#FFA956" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4" opacity="0.95"></polyline>
                     </svg>
 
-                    <!-- Center Mandatory Letter Node ('E') -->
-                    <button id="node-center" onclick="handleNodeTap('center')" aria-label="Center Letter E"
-                        class="center-node absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[78px] h-[78px] sm:w-[86px] sm:h-[86px] rounded-full flex items-center justify-center text-white font-display text-5xl sm:text-6xl z-20 cursor-pointer focus:outline-none">
+                    <!-- Mandatory Centre E Button -->
+                    <button id="node-center" type="button" onclick="handleNodeTap('center')" aria-label="Centre Letter E" class="center-node font-display">
                         E
-                        <span class="absolute -bottom-1.5 bg-white text-black font-body text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase tracking-wider shadow">
-                            CENTRE
-                        </span>
+                        <span class="centre-tag">CENTRE</span>
                     </button>
 
-                    <!-- 8 Outer Letter Nodes (Rendered dynamically via JS) -->
-                    <div id="outerNodesContainer" class="absolute inset-0"></div>
+                    <!-- 8 Outer Letter Nodes -->
+                    <div id="outerNodesContainer" style="position:absolute;inset:0;"></div>
                 </div>
 
-                <!-- Interactive Action Buttons -->
-                <div class="w-full max-w-sm grid grid-cols-4 gap-2.5 mt-4">
-                    <button onclick="shuffleOuterLetters()" class="col-span-1 flex items-center justify-center py-3 px-2 rounded-lg bg-white/10 hover:bg-white/15 active:scale-95 text-white font-semibold text-xs uppercase tracking-wider transition">
-                        Shuffle
-                    </button>
-
-                    <button onclick="deleteLastLetter()" class="col-span-1 flex items-center justify-center py-3 px-2 rounded-lg bg-white/10 hover:bg-white/15 active:scale-95 text-white font-semibold text-xs uppercase tracking-wider transition">
-                        Delete
-                    </button>
-
-                    <button onclick="clearCurrentWord()" class="col-span-1 flex items-center justify-center py-3 px-2 rounded-lg bg-white/10 hover:bg-white/15 active:scale-95 text-white font-semibold text-xs uppercase tracking-wider transition">
-                        Clear
-                    </button>
-
-                    <button onclick="submitCurrentWord()" class="col-span-1 flex items-center justify-center py-3 px-2 rounded-lg bg-ceroc-highlight hover:opacity-95 active:scale-95 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg">
-                        Enter
-                    </button>
+                <!-- Controls -->
+                <div class="action-grid">
+                    <button type="button" onclick="shuffleOuterLetters()" class="btn-ctrl">Shuffle</button>
+                    <button type="button" onclick="deleteLastLetter()" class="btn-ctrl">Delete</button>
+                    <button type="button" onclick="clearCurrentWord()" class="btn-ctrl">Clear</button>
+                    <button type="button" onclick="submitCurrentWord()" class="btn-ctrl btn-enter">Enter</button>
                 </div>
 
-                <!-- Bonus 9-Letter Hint Bar -->
-                <div class="w-full max-w-sm mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
-                    <div class="text-ceroc-lightOrange font-semibold uppercase tracking-wider">
-                        <span>9-Letter Ceroc Bonus:</span>
-                    </div>
-                    <div id="bonusHintContainer" class="flex items-center gap-2">
-                        <button onclick="revealBonusHint()" id="hintBtn" class="text-xs bg-ceroc-orange/20 hover:bg-ceroc-orange/30 text-ceroc-lightOrange border border-ceroc-orange/50 px-2.5 py-1 rounded font-semibold uppercase tracking-wider transition">
+                <!-- Bonus Clue Bar -->
+                <div class="hint-bar">
+                    <span style="color:var(--ceroc-light-orange);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">
+                        9-Letter Ceroc Bonus:
+                    </span>
+                    <div id="bonusHintContainer">
+                        <button type="button" onclick="revealBonusHint()" class="pill-btn" style="border-color:var(--ceroc-orange);">
                             Need a Clue?
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Found Words Bank & Official Rules -->
-            <div class="lg:col-span-5 flex flex-col gap-4">
-
-                <!-- Found Words Panel -->
-                <div class="bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 shadow-xl flex flex-col">
-                    <div class="flex items-center justify-between border-b border-white/10 pb-2.5 mb-2.5">
-                        <h2 class="font-display text-2xl sm:text-3xl text-white uppercase tracking-wide leading-none">YOUR FOUND WORDS</h2>
-                        <button onclick="shareScore()" class="bg-ceroc-highlight hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider px-3.5 py-1.5 rounded transition active:scale-95">
+            <!-- Right Column: Found Words & Rules -->
+            <div class="right-col">
+                <div class="glass-panel">
+                    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.6rem;margin-bottom:0.6rem;">
+                        <h2 class="font-display" style="font-size:1.65rem;line-height:1;">YOUR FOUND WORDS</h2>
+                        <button type="button" onclick="shareScore()" class="btn-ctrl btn-enter" style="padding:0.4rem 0.8rem;">
                             Share Score
                         </button>
                     </div>
 
-                    <!-- Scrollable Word Pills List -->
-                    <div id="foundWordsList" class="min-h-[120px] max-h-[190px] overflow-y-auto flex flex-wrap content-start gap-1.5 p-1">
-                        <p id="emptyWordsPrompt" class="text-white/45 text-xs w-full text-center py-8">
-                            Words you find will appear here. Remember every word must contain <strong class="text-ceroc-lightOrange">E</strong>!
-                        </p>
-                    </div>
+                    <div id="foundWordsList" class="words-list"></div>
                 </div>
 
-                <!-- On-Brand "THE RULES" Panel (No prohibited bullet icons or white box frames) -->
-                <div class="bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5">
-                    <div class="inline-flex flex-col items-start mb-2">
-                        <h2 class="font-display text-3xl text-white uppercase leading-none tracking-wide">
-                            THE RULES
-                        </h2>
-                        <div class="w-full h-[2px] bg-white my-1.5"></div>
+                <div class="glass-panel">
+                    <div class="title-block" style="align-items:flex-start;margin-bottom:0.5rem;">
+                        <h2 class="font-display" style="font-size:1.8rem;line-height:1;">THE RULES</h2>
+                        <div class="title-underline" style="margin:0.35rem 0;"></div>
                     </div>
-                    <div class="space-y-2.5 text-xs sm:text-sm text-white/90 leading-relaxed">
-                        <p>Every word must contain the centre letter <strong class="text-ceroc-lightOrange font-bold">E</strong>.</p>
-                        <p>Words must be at least <strong class="text-white font-bold">3 letters</strong> long.</p>
+                    <div style="font-size:0.8rem;line-height:1.6;color:rgba(255,255,255,0.9);display:flex;flex-direction:column;gap:0.45rem;">
+                        <p>Every word must include the orange centre letter <strong style="color:var(--ceroc-light-orange);">E</strong> tile.</p>
+                        <p>Words must be at least <strong>3 letters</strong> long.</p>
                         <p>You can only use each letter tile as many times as it appears.</p>
-                        <p class="pt-1 text-ceroc-lightOrange font-semibold">
-                            <strong class="text-ceroc-orange uppercase">BONUS CHALLENGE:</strong> Find the 9-letter word connected to Ceroc!
+                        <p style="color:var(--ceroc-light-orange);font-weight:600;padding-top:0.2rem;">
+                            <strong style="color:var(--ceroc-orange);">BONUS CHALLENGE:</strong> Find the 9-letter word connected to Ceroc!
                         </p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Bottom Milestone Banner: "HOW MANY CAN YOU FIND?" -->
-        <div class="w-full max-w-4xl mt-5">
-            <div class="bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 items-center gap-4">
-                <div class="md:col-span-5 text-center md:border-r border-white/15 pr-2 flex flex-col items-center">
-                    <div class="inline-flex flex-col items-center">
-                        <p class="font-display text-3xl sm:text-4xl text-white uppercase leading-none tracking-wide">
-                            HOW MANY CAN YOU FIND?
-                        </p>
-                        <div class="w-full h-[2px] bg-white my-2"></div>
-                    </div>
-                    <span class="text-xs text-ceroc-lightOrange">Climb the ranks from Warming Up to Word Wizard!</span>
-                </div>
-                <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm font-semibold text-white">
-                    <div id="rankRow10" class="flex items-center gap-2 p-2 rounded transition">
-                        <span class="text-ceroc-orange font-extrabold">10+</span> = Warming Up
-                    </div>
-                    <div id="rankRow25" class="flex items-center gap-2 p-2 rounded transition">
-                        <span class="text-ceroc-orange font-extrabold">25+</span> = In the Groove
-                    </div>
-                    <div id="rankRow40" class="flex items-center gap-2 p-2 rounded transition">
-                        <span class="text-ceroc-orange font-extrabold">40+</span> = Word Wheel Legend
-                    </div>
-                    <div id="rankRow60" class="flex items-center gap-2 p-2 rounded transition">
-                        <span class="text-ceroc-orange font-extrabold">60+</span> = Word Wizard!
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Bottom Milestone Key -->
+        <div class="glass-panel" style="margin-top:1.25rem;">
+            <div class="milestone-grid">
+                <div style="text-align:center;">
+                    <div class="title-block">
+                        <p class="font-display" style="font-size:2rem;line-height:1;">HOW MANY CAN YOU FIND?</p>
+                        <div class="title-underline" style="margin:0.4rem 0;"></div>
+                    </div>
+                    <p style="font-size:0.75rem;color:var(--ceroc-light-orange);">Climb the ranks from Warming Up to Word Wizard!</p>
+                </div>
+                <div class="ranks-grid">
+                    <div id="rankRow10" class="rank-row"><span style="color:var(--ceroc-orange);font-weight:800;">10+</span> = Warming Up</div>
+                    <div id="rankRow25" class="rank-row"><span style="color:var(--ceroc-orange);font-weight:800;">25+</span> = In the Groove</div>
+                    <div id="rankRow40" class="rank-row"><span style="color:var(--ceroc-orange);font-weight:800;">40+</span> = Word Wheel Legend</div>
+                    <div id="rankRow60" class="rank-row"><span style="color:var(--ceroc-orange);font-weight:800;">60+</span> = Word Wizard!</div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- Social Media Call-To-Action Footer -->
-    <footer class="relative z-10 w-full max-w-4xl mx-auto px-4 py-4 mt-2 text-center">
-        <div class="bg-black/85 border border-white/15 rounded-2xl px-4 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div class="text-center sm:text-left">
-                <p class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Ready for a real workout on the dancefloor?</p>
-                <p class="text-xs text-ceroc-lightOrange mt-0.5">Drop your score in the comments & join us at your local Ceroc class!</p>
+    <!-- Footer with GDPR / Privacy Controls -->
+    <footer class="container" style="margin-top:0.5rem;padding-bottom:1.5rem;">
+        <div class="glass-panel footer-bar">
+            <div>
+                <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">Ready for a real workout on the dancefloor?</p>
+                <p style="font-size:0.72rem;color:var(--ceroc-light-orange);margin-top:0.2rem;">
+                    Drop your score in the comments & join us at your local Ceroc class!
+                </p>
             </div>
-            <div class="flex items-center gap-2.5">
-                <button onclick="resetGamePrompt()" class="text-xs text-white/60 hover:text-white px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 font-semibold uppercase tracking-wider transition">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0.5rem;">
+                <button type="button" onclick="togglePrivacyModal()" class="pill-btn">
+                    Privacy & Storage
+                </button>
+                <button type="button" onclick="resetGamePrompt()" class="pill-btn">
                     Reset Progress
                 </button>
-                <a href="https://www.ceroc.com" target="_blank" rel="noopener noreferrer" class="bg-ceroc-highlight hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-lg shadow transition whitespace-nowrap">
+                <a href="https://www.ceroc.com" target="_blank" rel="noopener noreferrer" class="btn-ctrl btn-enter" style="text-decoration:none;padding:0.55rem 0.95rem;">
                     Find a Class
                 </a>
             </div>
         </div>
     </footer>
 
-    <!-- Rules, Share & Reset Modal -->
-    <div id="modalOverlay" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div id="modalContent" class="bg-black border border-white/25 max-w-md w-full rounded-2xl p-6 relative text-white shadow-2xl">
-            <button onclick="closeModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center font-bold text-sm">
-                ✕
-            </button>
+    <!-- Modal Overlay -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-card">
+            <button type="button" onclick="closeModal()" class="close-btn">✕</button>
             <div id="modalBody"></div>
         </div>
     </div>
 
     <script>
         /**************************************************************
-         * 1. COMPREHENSIVE VALID WORD LIST FOR {E, E, E, F, L, R, S, T, Y}
-         * Every word below is 3-9 letters, uses only available tiles,
-         * and contains at least one 'E'.
+         * 1. VALID WORD DICTIONARY ({E, E, E, F, L, R, S, T, Y})
          **************************************************************/
         const RAW_DICTIONARY = [
-            // 9-Letter Ceroc Bonus Word
             "FREESTYLE",
-            // 8-Letter Words
             "FLEETERS", "FREESTER", "FRETTERS", "LETTERER", "REFELLET", "RESETTER", "RESETTLE", "SHELTERY", "STEELERY",
-            // 7-Letter Words
             "EELFRYS", "FEELERS", "FEETLES", "FELTERS", "FERRETS", "FERRETY", "FESTERS", "FETTERS", "FLEERER", "FLEETER",
             "FLEETLY", "FLIRTER", "FLYTIER", "FREERS", "FRETTER", "FRYERS", "LEERIER", "LEFTIES", "LETTERS", "LITTERY",
             "REEFERS", "REELERS", "REFELTS", "RETRIES", "RESETTE", "SELFERS", "SETTLER", "SLEETER", "STEELER",
             "STEERER", "STERLET", "STYLERS", "TEETERS", "TEETERY", "TELFERS", "TERSELY", "TESTERS", "TESTILY", "TREELET",
             "TRESTLE", "YELLERS",
-            // 6-Letter Words
             "EFFETE", "EGOIST", "ELFEES", "ELFISH", "ESTERS", "EYELETS", "EYELET", "FEELER", "FEALTY", "FELTER",
             "FERRET", "FESTER", "FETTER", "FEVERS", "FLEERS", "FLEETS", "FLIERS", "FLYERS", "FREELY", "FREERS",
             "FREEST", "FRETTY", "FRYERS", "LEERED", "LEERES", "LEFTYS", "LESSEE", "LESSER", "LESTER", "LETTER",
@@ -443,7 +871,6 @@
             "SETTLE", "SLEETY", "SLEETS", "SLYEST", "STEELS", "STEELY", "STEERS", "STERES", "STYLER", "STYLES",
             "TEELER", "TEETER", "TELFER", "TELLER", "TERSER", "TESTER", "TESTES", "TETHER", "TREES", "TSETSE",
             "TYREES", "YELLER",
-            // 5-Letter Words
             "EELER", "EERIE", "EFTS", "ELATE", "ELFES", "ELITE", "ELSES", "ESTER", "EYERS", "EYRES",
             "FEELS", "FEELY", "FEESE", "FEETS", "FELTS", "FELTY", "FERES", "FERLY", "FERRY", "FESTS",
             "FETES", "FEYER", "FEYLY", "FLEER", "FLEES", "FLEET", "FLIER", "FLIES", "FLYER", "FLYTE",
@@ -454,7 +881,6 @@
             "SLEET", "SLYER", "STEEL", "STEER", "STERE", "STELA", "STELE", "STYES", "STYLE", "TEELS",
             "TEERS", "TELES", "TELLS", "TELLY", "TERES", "TERFE", "TERSE", "TESTS", "TESTY", "TREES",
             "TREYS", "TYERS", "TYRES", "YELLS", "YELTS",
-            // 4-Letter Words
             "EELS", "EELY", "EERY", "EFTS", "ELFE", "ELFS", "ELSE", "ERES", "ERFS", "ERRS", "ERST", "ESES",
             "ESTS", "ETES", "EYER", "EYES", "EYRE", "EYRY", "FEEL", "FEER", "FEES", "FEET",
             "FELT", "FERE", "FEST", "FETE", "FETS", "FEYS", "FLEE", "FLEY", "FREE", "FRET",
@@ -464,7 +890,6 @@
             "SLEE", "SLEY", "STEL", "STEY", "STYE", "TEEL", "TEER", "TEES", "TEFS", "TELE", "TELL", "TELS",
             "TERE", "TERF", "TEST", "TETE", "TREE", "TREF", "TRES", "TRET", "TREY", "TYER", "TYES",
             "TYRE", "YEES", "YELL", "YELP", "YELS", "YELT", "YERK", "YEST", "YETE", "YETS",
-            // 3-Letter Words
             "EEL", "EER", "EFT", "ELF", "ELS", "ELT", "EME", "ERE", "ERF", "ERR", "ERS",
             "ESE", "EST", "ETE", "EYE", "FEE", "FER", "FES", "FET", "FEY", "LEE",
             "LES", "LET", "LEY", "LYE", "REE", "REF", "REI", "RES", "RET", "RYE",
@@ -472,10 +897,8 @@
             "TET", "TYE", "YEE", "YEL", "YER", "YES", "YET"
         ];
 
-        // Available letter frequencies in the wheel: E:3, F:1, L:1, R:1, S:1, T:1, Y:1
         const WHEEL_LETTER_COUNTS = { E: 3, F: 1, L: 1, R: 1, S: 1, T: 1, Y: 1 };
 
-        // Verify if word can be strictly formed from WHEEL_LETTER_COUNTS & contains 'E'
         function canFormFromWheel(word) {
             const upper = word.toUpperCase().trim();
             if (upper.length < 3 || upper.length > 9) return false;
@@ -489,19 +912,13 @@
             return true;
         }
 
-        // Build clean, deduplicated Set of valid words
         const VALID_WORDS = new Set(
-            RAW_DICTIONARY
-                .map(w => w.replace(/\s+/g, '').toUpperCase())
-                .filter(canFormFromWheel)
+            RAW_DICTIONARY.map(w => w.replace(/\s+/g, '').toUpperCase()).filter(canFormFromWheel)
         );
 
         /**************************************************************
-         * 2. GAME STATE & WHEEL CONFIGURATION
+         * 2. GAME STATE & GDPR STORAGE PREFERENCES
          **************************************************************/
-        // Matches the exact clockwise positions from top in the Ceroc graphic:
-        // Top(0): Y, Top-Right(1): R, Right(2): S, Bottom-Right(3): F,
-        // Bottom(4): L, Bottom-Left(5): E, Left(6): T, Top-Left(7): E
         let outerNodes = [
             { id: 'outer-0', letter: 'Y', angleDeg: -90 },
             { id: 'outer-1', letter: 'R', angleDeg: -45 },
@@ -518,55 +935,96 @@
         let bonusUnlocked = false;
         let hintLevel = 0;
         let soundEnabled = true;
+        let localSaveEnabled = true; // User-controllable PECR storage preference
 
         const STORAGE_KEY = 'ceroc_word_wheel_save_v1';
+        const PREF_KEY = 'ceroc_word_wheel_storage_pref';
 
         /**************************************************************
-         * 3. SYNTHESIZED SOUND EFFECTS (Tone.js)
+         * 3. NATIVE WEB AUDIO ENGINE (ZERO EXTERNAL CDN + iOS CHROME FIX)
          **************************************************************/
-        let synth = null;
-        let polySynth = null;
+        let audioCtx = null;
 
-        function initAudio() {
-            if (!synth && window.Tone) {
-                synth = new Tone.Synth({
-                    oscillator: { type: 'triangle' },
-                    envelope: { attack: 0.01, decay: 0.1, sustain: 0.05, release: 0.15 }
-                }).toDestination();
-                synth.volume.value = -8;
-
-                polySynth = new Tone.PolySynth(Tone.Synth).toDestination();
-                polySynth.volume.value = -6;
+        function getOrUnlockAudioCtx() {
+            if (!soundEnabled) return null;
+            try {
+                // Allow playback even if iOS Silent Switch is on (iOS 17+ WebKit)
+                if (navigator.audioSession) {
+                    navigator.audioSession.type = 'playback';
+                }
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) return null;
+                if (!audioCtx) {
+                    audioCtx = new AudioContextClass();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                return audioCtx;
+            } catch (e) {
+                return null;
             }
         }
 
-        function playSound(type) {
-            if (!soundEnabled || !window.Tone) return;
+        // Unlock WebKit audio on first screen touch
+        function unlockOnFirstGesture() {
+            const ctx = getOrUnlockAudioCtx();
+            if (ctx) {
+                try {
+                    const buf = ctx.createBuffer(1, 1, 22050);
+                    const src = ctx.createBufferSource();
+                    src.buffer = buf;
+                    src.connect(ctx.destination);
+                    if (src.start) src.start(0);
+                } catch (e) {}
+            }
+        }
+        window.addEventListener('touchstart', unlockOnFirstGesture, { passive: true, once: true });
+        window.addEventListener('touchend', unlockOnFirstGesture, { passive: true, once: true });
+        window.addEventListener('click', unlockOnFirstGesture, { passive: true, once: true });
+
+        function playTone(freq, startTime, duration, type = 'triangle', peakGain = 0.16) {
+            const ctx = getOrUnlockAudioCtx();
+            if (!ctx) return;
             try {
-                if (Tone.context.state !== 'running') {
-                    Tone.context.resume();
-                }
-                initAudio();
-                const now = Tone.now();
-                if (type === 'tap') {
-                    const notes = ['C5', 'D5', 'E5', 'G5', 'A5', 'C6', 'D6', 'E6', 'G6'];
-                    const note = notes[Math.min(selectedSequence.length, notes.length - 1)];
-                    synth.triggerAttackRelease(note, '32n', now);
-                } else if (type === 'delete') {
-                    synth.triggerAttackRelease('A4', '32n', now);
-                } else if (type === 'success') {
-                    polySynth.triggerAttackRelease(['C5', 'E5', 'G5'], '16n', now);
-                    polySynth.triggerAttackRelease(['E5', 'G5', 'C6'], '8n', now + 0.1);
-                } else if (type === 'bonus') {
-                    polySynth.triggerAttackRelease(['C4', 'E4', 'G4', 'C5'], '8n', now);
-                    polySynth.triggerAttackRelease(['F4', 'A4', 'C5', 'F5'], '8n', now + 0.15);
-                    polySynth.triggerAttackRelease(['G4', 'B4', 'D5', 'G5'], '8n', now + 0.30);
-                    polySynth.triggerAttackRelease(['C5', 'E5', 'G5', 'C6'], '2n', now + 0.45);
-                } else if (type === 'error') {
-                    synth.triggerAttackRelease('F#3', '16n', now);
-                    synth.triggerAttackRelease('F3', '8n', now + 0.08);
-                }
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, startTime);
+
+                gain.gain.setValueAtTime(0.001, startTime);
+                gain.gain.exponentialRampToValueAtTime(peakGain, startTime + 0.015);
+                gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(startTime);
+                osc.stop(startTime + duration + 0.02);
             } catch (e) {}
+        }
+
+        function playSound(type) {
+            const ctx = getOrUnlockAudioCtx();
+            if (!ctx) return;
+            const now = ctx.currentTime + 0.01;
+
+            if (type === 'tap') {
+                const freqs = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5, 1174.66, 1318.51, 1567.98];
+                const f = freqs[Math.min(selectedSequence.length, freqs.length - 1)];
+                playTone(f, now, 0.11, 'triangle', 0.18);
+            } else if (type === 'delete') {
+                playTone(440.0, now, 0.09, 'triangle', 0.14);
+            } else if (type === 'success') {
+                [523.25, 659.25, 783.99].forEach(f => playTone(f, now, 0.15, 'triangle', 0.12));
+                [659.25, 783.99, 1046.5].forEach(f => playTone(f, now + 0.11, 0.25, 'triangle', 0.12));
+            } else if (type === 'bonus') {
+                [523.25, 659.25, 783.99].forEach(f => playTone(f, now, 0.15, 'triangle', 0.12));
+                [587.33, 739.99, 880.0].forEach(f => playTone(f, now + 0.15, 0.15, 'triangle', 0.12));
+                [659.25, 783.99, 1046.5].forEach(f => playTone(f, now + 0.30, 0.45, 'triangle', 0.15));
+            } else if (type === 'error') {
+                playTone(185.0, now, 0.1, 'sawtooth', 0.12);
+                playTone(174.61, now + 0.08, 0.16, 'sawtooth', 0.12);
+            }
         }
 
         function toggleSound() {
@@ -598,7 +1056,6 @@
                 const xPct = 50 + radiusPct * Math.cos(rad);
                 const yPct = 50 + radiusPct * Math.sin(rad);
 
-                // Draw SVG Spoke
                 const svgX = svgCenter + svgRadius * Math.cos(rad);
                 const svgY = svgCenter + svgRadius * Math.sin(rad);
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -608,23 +1065,20 @@
                 line.setAttribute('y2', svgY.toFixed(1));
                 spokesGroup.appendChild(line);
 
-                // Create Outer Letter Button
                 const btn = document.createElement('button');
                 btn.id = node.id;
                 btn.type = 'button';
                 btn.setAttribute('aria-label', `Outer Letter ${node.letter}`);
                 const isSelected = selectedSequence.includes(node.id);
-                btn.className = `letter-node absolute w-[62px] h-[62px] sm:w-[68px] sm:h-[68px] rounded-full bg-white text-black font-display text-4xl sm:text-5xl flex items-center justify-center z-20 cursor-pointer focus:outline-none ${isSelected ? 'selected' : ''}`;
+                btn.className = `letter-node font-display ${isSelected ? 'selected' : ''}`;
                 btn.style.left = `${xPct}%`;
                 btn.style.top = `${yPct}%`;
-                btn.style.transform = 'translate(-50%, -50%)';
                 btn.textContent = node.letter;
 
                 btn.onclick = () => handleNodeTap(node.id);
                 container.appendChild(btn);
             });
 
-            // Update Center Node Active State
             const centerBtn = document.getElementById('node-center');
             if (selectedSequence.includes('center')) {
                 centerBtn.classList.add('selected');
@@ -681,21 +1135,19 @@
                 const letter = getLetterById(nodeId);
                 const isCenter = nodeId === 'center';
                 const badge = document.createElement('span');
-                badge.className = `letter-pop inline-flex items-center justify-center w-8 h-9 sm:w-9 sm:h-10 rounded-lg font-display text-2xl sm:text-3xl shadow ${
-                    isCenter
-                        ? 'bg-ceroc-orange text-white border border-white'
-                        : 'bg-white text-black'
-                }`;
+                badge.className = 'letter-badge font-display';
+                badge.style.backgroundColor = isCenter ? '#F87B03' : '#FFFFFF';
+                badge.style.color = isCenter ? '#FFFFFF' : '#000000';
+                badge.style.border = isCenter ? '1px solid #FFFFFF' : 'none';
                 badge.textContent = letter;
                 lettersContainer.appendChild(badge);
             });
         }
 
         /**************************************************************
-         * 5. INTERACTION LOGIC (TAP, KEYBOARD, SHUFFLE, SUBMIT)
+         * 5. INTERACTION LOGIC (STRICT CENTRE 'E' RULE ENFORCED)
          **************************************************************/
         function handleNodeTap(nodeId) {
-            // If tapping the last selected node again, deselect it
             if (selectedSequence.length > 0 && selectedSequence[selectedSequence.length - 1] === nodeId) {
                 selectedSequence.pop();
                 playSound('delete');
@@ -703,7 +1155,6 @@
                 return;
             }
 
-            // If already in sequence earlier, notify player
             if (selectedSequence.includes(nodeId)) {
                 showFeedback('Each letter tile can only be used once per word!', 'warn');
                 playSound('error');
@@ -751,13 +1202,13 @@
 
             if (word.length === 0) return;
 
-            // Rule 1: Must physically select the orange centre 'E' tile ('center')
+            // STRICT RULE 1: Must physically include the orange centre 'E' tile ('center')
             if (!selectedSequence.includes('center')) {
                 triggerReject(box, 'You must include the orange centre E tile!');
                 return;
             }
 
-            // Rule 2: At least 3 letters long
+            // RULE 2: At least 3 letters long
             if (word.length < 3) {
                 triggerReject(box, 'Words must be at least 3 letters long!');
                 return;
@@ -775,7 +1226,7 @@
                 return;
             }
 
-            // Word is valid!
+            // Valid word!
             foundWords.unshift(word);
             selectedSequence = [];
             renderWheel();
@@ -794,6 +1245,7 @@
             saveProgress();
             updateScoreAndUI();
         }
+
         function triggerReject(element, message) {
             playSound('error');
             showFeedback(message, 'error');
@@ -809,24 +1261,26 @@
         function showFeedback(msg, type = 'info') {
             const toast = document.getElementById('feedbackToast');
             toast.textContent = msg;
-            toast.className = 'px-3.5 py-1 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 opacity-100 transform translate-y-0 shadow-lg ';
+            toast.className = 'toast-msg visible';
 
             if (type === 'error' || type === 'warn') {
-                toast.className += 'bg-ceroc-highlight text-white';
+                toast.style.backgroundColor = '#D6336C';
+                toast.style.color = '#FFFFFF';
             } else if (type === 'bonus') {
-                toast.className += 'bg-ceroc-orange text-white border border-white scale-105';
+                toast.style.backgroundColor = '#F87B03';
+                toast.style.color = '#FFFFFF';
             } else {
-                toast.className += 'bg-ceroc-lightOrange text-black';
+                toast.style.backgroundColor = '#FFA956';
+                toast.style.color = '#000000';
             }
 
             clearTimeout(window.feedbackTimer);
             window.feedbackTimer = setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', '-translate-y-1');
+                toast.classList.remove('visible');
             }, 2600);
         }
 
-        // Physical Keyboard Support (Prioritizes Center 'E' first, Spacebar shuffles)
+        // Physical Keyboard Support
         window.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey || e.altKey) return;
             const key = e.key.toUpperCase();
@@ -844,7 +1298,6 @@
                 e.preventDefault();
                 shuffleOuterLetters();
             } else if (/^[A-Z]$/.test(key)) {
-                // Prioritize picking 'center' E first so players always satisfy the mandatory center rule
                 if (key === 'E' && !selectedSequence.includes('center')) {
                     handleNodeTap('center');
                     return;
@@ -874,14 +1327,11 @@
             const count = foundWords.length;
             document.getElementById('wordCountDisplay').textContent = count;
             document.getElementById('totalPossibleDisplay').textContent = VALID_WORDS.size;
-
-            const rank = getRankTitle(count);
-            document.getElementById('rankBadgeText').textContent = rank;
+            document.getElementById('rankBadgeText').textContent = getRankTitle(count);
 
             const pct = Math.min(100, (count / 60) * 100);
             document.getElementById('progressBarFill').style.width = `${pct}%`;
 
-            // Highlight active tier row in bottom card
             const tiers = [
                 { id: 'rankRow10', min: 10 },
                 { id: 'rankRow25', min: 25 },
@@ -891,32 +1341,28 @@
             tiers.forEach(t => {
                 const el = document.getElementById(t.id);
                 if (count >= t.min) {
-                    el.className = 'flex items-center gap-2 p-2 rounded-lg bg-ceroc-orange/20 border border-ceroc-orange text-white font-bold transition';
+                    el.classList.add('unlocked');
                 } else {
-                    el.className = 'flex items-center gap-2 p-2 rounded-lg text-white/75 transition';
+                    el.classList.remove('unlocked');
                 }
             });
 
-            // Bonus badge
             const bonusBadge = document.getElementById('bonusBadge');
             if (bonusUnlocked || foundWords.includes('FREESTYLE')) {
                 bonusUnlocked = true;
                 bonusBadge.classList.remove('hidden');
                 document.getElementById('bonusHintContainer').innerHTML = `
-                    <span class="text-xs font-extrabold text-ceroc-orange bg-ceroc-orange/15 px-2.5 py-1 rounded border border-ceroc-orange">
-                        FREESTYLE
-                    </span>
+                    <span class="badge-orange">FREESTYLE</span>
                 `;
             } else {
                 bonusBadge.classList.add('hidden');
             }
 
-            // Found words list
             const listEl = document.getElementById('foundWordsList');
             if (count === 0) {
                 listEl.innerHTML = `
-                    <p id="emptyWordsPrompt" class="text-white/45 text-xs w-full text-center py-8">
-                        Words you find will appear here. Remember every word must contain <strong class="text-ceroc-lightOrange">E</strong>!
+                    <p style="color:rgba(255,255,255,0.45);font-size:0.75rem;width:100%;text-align:center;padding:2rem 0;">
+                        Words you find will appear here. Remember every word must include the orange centre <strong style="color:var(--ceroc-light-orange);">E</strong>!
                     </p>
                 `;
             } else {
@@ -924,9 +1370,7 @@
                 foundWords.forEach(w => {
                     const isBonus = w === 'FREESTYLE';
                     const pill = document.createElement('span');
-                    pill.className = isBonus
-                        ? 'px-3 py-1 rounded text-xs font-extrabold bg-ceroc-orange text-white shadow-md uppercase tracking-wider'
-                        : 'px-2.5 py-1 rounded text-xs font-semibold bg-white/10 text-white border border-white/15 uppercase tracking-wider';
+                    pill.className = `word-pill ${isBonus ? 'bonus' : ''}`;
                     pill.textContent = w;
                     listEl.appendChild(pill);
                 });
@@ -938,20 +1382,21 @@
             const container = document.getElementById('bonusHintContainer');
             if (hintLevel === 1) {
                 container.innerHTML = `
-                    <span class="text-xs text-ceroc-lightOrange">Starts with <strong class="text-white">F R E...</strong></span>
-                    <button onclick="revealBonusHint()" class="text-[11px] underline text-white font-semibold ml-1">More</button>
+                    <span style="color:var(--ceroc-light-orange);font-size:0.72rem;">Starts with <strong style="color:#fff;">F R E...</strong></span>
+                    <button type="button" onclick="revealBonusHint()" style="background:none;border:none;color:#fff;text-decoration:underline;font-size:0.7rem;font-weight:700;margin-left:0.35rem;cursor:pointer;">More</button>
                 `;
             } else {
                 container.innerHTML = `
-                    <span class="text-xs text-ceroc-lightOrange">Unchoreographed social dancing (<strong class="text-white">F R E E _ _ _ _ E</strong>)</span>
+                    <span style="color:var(--ceroc-light-orange);font-size:0.72rem;">Social dancing (<strong style="color:#fff;">F R E E _ _ _ _ E</strong>)</span>
                 `;
             }
         }
 
         /**************************************************************
-         * 7. LOCAL STORAGE & SOCIAL SHARING MODALS
+         * 7. GDPR / PECR COMPLIANT LOCAL STORAGE & PRIVACY CONTROLS
          **************************************************************/
         function saveProgress() {
+            if (!localSaveEnabled) return;
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify({
                     foundWords,
@@ -962,6 +1407,11 @@
 
         function loadProgress() {
             try {
+                const pref = localStorage.getItem(PREF_KEY);
+                if (pref === 'disabled') {
+                    localSaveEnabled = false;
+                    return;
+                }
                 const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     const data = JSON.parse(raw);
@@ -973,15 +1423,60 @@
             } catch (e) {}
         }
 
+        function toggleLocalSavePref() {
+            localSaveEnabled = !localSaveEnabled;
+            try {
+                if (localSaveEnabled) {
+                    localStorage.removeItem(PREF_KEY);
+                    saveProgress();
+                    showFeedback('Auto-Save Progress: Enabled', 'info');
+                } else {
+                    localStorage.removeItem(STORAGE_KEY);
+                    localStorage.setItem(PREF_KEY, 'disabled');
+                    showFeedback('Auto-Save Disabled & Local Storage Cleared', 'info');
+                }
+            } catch (e) {}
+            togglePrivacyModal();
+        }
+
+        function togglePrivacyModal() {
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div>
+                    <div class="title-block" style="margin-bottom:0.75rem;">
+                        <h3 class="font-display" style="font-size:2rem;line-height:1;">PRIVACY & DATA NOTICE</h3>
+                        <div class="title-underline" style="margin:0.35rem 0;"></div>
+                    </div>
+                    <div style="font-size:0.76rem;line-height:1.55;color:rgba(255,255,255,0.88);display:flex;flex-direction:column;gap:0.65rem;margin-bottom:1.1rem;">
+                        <p><strong style="color:var(--ceroc-light-orange);">1. Zero Tracking or Cookies:</strong> This game does not use analytics cookies, advertising pixels, or third-party tracking scripts, and collects no personal data from your gameplay.</p>
+                        <p><strong style="color:var(--ceroc-light-orange);">2. Strictly Necessary Device Storage (PECR):</strong> To stop you losing your found words if your browser refreshes, your word list is saved locally on your own device using browser <code>localStorage</code>. This data never leaves your device or reaches our servers.</p>
+                        <p><strong style="color:var(--ceroc-light-orange);">3. Infrastructure Logs:</strong> Our static web host processes standard technical connection data (such as IP address) strictly as necessary to deliver this webpage securely under legitimate interests (UK GDPR Art. 6(1)(f)).</p>
+                        <div style="padding:0.65rem;border-radius:0.5rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:space-between;gap:0.5rem;">
+                            <span><strong>Device Auto-Save:</strong> ${localSaveEnabled ? '<span style="color:#FFA956;">Active</span>' : '<span style="color:#D6336C;">Disabled</span>'}</span>
+                            <button type="button" onclick="toggleLocalSavePref()" class="pill-btn">
+                                ${localSaveEnabled ? 'Turn Off & Erase' : 'Turn On Auto-Save'}
+                            </button>
+                        </div>
+                        <p style="font-size:0.7rem;color:rgba(255,255,255,0.6);">
+                            For full details on how Ceroc handles personal data, view the <a href="https://www.ceroc.com/privacy-policy" target="_blank" rel="noopener noreferrer" style="color:var(--ceroc-light-orange);text-decoration:underline;">Ceroc Privacy Policy</a>.
+                        </p>
+                    </div>
+                    <button type="button" onclick="closeModal()" class="btn-ctrl btn-enter" style="width:100%;">
+                        Close
+                    </button>
+                </div>
+            `;
+            openModal();
+        }
+
         function shareScore() {
             const count = foundWords.length;
             const rank = getRankTitle(count);
             const bonusText = bonusUnlocked
                 ? 'and unlocked the 9-letter Ceroc bonus word!'
                 : 'so far!';
-            const shareText = `THE CEROC WORD WHEEL\nI found ${count} words (${rank}) ${bonusText}\nCan you beat my score? https://glowsocial-uk.github.io/ceroc-word-wheel/`;
+            const shareText = `THE CEROC WORD WHEEL\nI found ${count} words (${rank}) ${bonusText}\nCan you beat my score? ${window.location.href}`;
 
-            // Copy to clipboard using textarea + execCommand for maximum in-app browser compatibility
             const tempInput = document.createElement('textarea');
             tempInput.value = shareText;
             document.body.appendChild(tempInput);
@@ -991,14 +1486,14 @@
 
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
-                <div class="text-center">
-                    <div class="inline-flex flex-col items-center mb-3">
-                        <h3 class="font-display text-4xl text-white uppercase leading-none">SCORE COPIED!</h3>
-                        <div class="w-full h-[2px] bg-white my-2"></div>
+                <div style="text-align:center;">
+                    <div class="title-block" style="margin-bottom:0.6rem;">
+                        <h3 class="font-display" style="font-size:2.2rem;line-height:1;">SCORE COPIED!</h3>
+                        <div class="title-underline" style="margin:0.35rem 0;"></div>
                     </div>
-                    <p class="text-xs text-ceroc-lightOrange mb-3">Paste this into the social media post comments to challenge your dance friends:</p>
-                    <div class="bg-white/10 border border-white/20 rounded-xl p-3 text-left text-xs font-mono text-white whitespace-pre-line mb-4">${shareText}</div>
-                    <button onclick="closeModal()" class="w-full py-2.5 rounded-lg bg-ceroc-highlight text-white font-bold text-xs uppercase tracking-wider shadow">
+                    <p style="font-size:0.75rem;color:var(--ceroc-light-orange);margin-bottom:0.75rem;">Paste this into the social media post comments to challenge your dance friends:</p>
+                    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:0.6rem;padding:0.75rem;text-align:left;font-family:monospace;font-size:0.75rem;white-space:pre-line;margin-bottom:1rem;">${shareText}</div>
+                    <button type="button" onclick="closeModal()" class="btn-ctrl btn-enter" style="width:100%;">
                         Back to Game
                     </button>
                 </div>
@@ -1010,21 +1505,21 @@
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
                 <div>
-                    <div class="flex flex-col items-center mb-4">
-                        <div class="inline-flex flex-col items-center">
-                            <h3 class="font-display text-4xl text-white uppercase leading-none">THE RULES</h3>
-                            <div class="w-full h-[2px] bg-white my-2"></div>
+                    <div style="text-align:center;margin-bottom:0.75rem;">
+                        <div class="title-block">
+                            <h3 class="font-display" style="font-size:2.2rem;line-height:1;">THE RULES</h3>
+                            <div class="title-underline" style="margin:0.35rem 0;"></div>
                         </div>
                     </div>
-                    <div class="space-y-3 text-xs sm:text-sm text-white/90 mb-5 leading-relaxed">
-                        <p>Every word must contain the centre letter <strong class="text-ceroc-lightOrange">E</strong>.</p>
+                    <div style="font-size:0.82rem;line-height:1.6;color:rgba(255,255,255,0.9);display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.2rem;">
+                        <p>Every word must include the orange centre letter <strong style="color:var(--ceroc-light-orange);">E</strong> tile.</p>
                         <p>Words must be at least <strong>3 letters</strong> long.</p>
                         <p>You can only use each letter as many times as it appears in the wheel.</p>
-                        <p class="p-3 rounded-lg bg-ceroc-orange/15 border border-ceroc-orange text-ceroc-lightOrange font-semibold">
-                            <strong class="text-ceroc-orange uppercase">BONUS CHALLENGE:</strong> Find the 9-letter word connected to Ceroc!
+                        <p style="padding:0.65rem;border-radius:0.5rem;background:rgba(248,123,3,0.15);border:1px solid var(--ceroc-orange);color:var(--ceroc-light-orange);font-weight:600;">
+                            <strong style="color:var(--ceroc-orange);">BONUS CHALLENGE:</strong> Find the 9-letter word connected to Ceroc!
                         </p>
                     </div>
-                    <button onclick="closeModal()" class="w-full py-2.5 rounded-lg bg-ceroc-highlight text-white font-bold text-xs uppercase tracking-wider">
+                    <button type="button" onclick="closeModal()" class="btn-ctrl btn-enter" style="width:100%;">
                         Let's Play!
                     </button>
                 </div>
@@ -1035,17 +1530,17 @@
         function resetGamePrompt() {
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
-                <div class="text-center">
-                    <div class="inline-flex flex-col items-center mb-2">
-                        <h3 class="font-display text-3xl text-white uppercase leading-none">RESET YOUR PROGRESS?</h3>
-                        <div class="w-full h-[2px] bg-white my-2"></div>
+                <div style="text-align:center;">
+                    <div class="title-block" style="margin-bottom:0.5rem;">
+                        <h3 class="font-display" style="font-size:2rem;line-height:1;">RESET YOUR PROGRESS?</h3>
+                        <div class="title-underline" style="margin:0.35rem 0;"></div>
                     </div>
-                    <p class="text-xs text-ceroc-lightOrange mb-5">This will clear your ${foundWords.length} found words so you can play fresh.</p>
-                    <div class="flex gap-2.5">
-                        <button onclick="closeModal()" class="flex-1 py-2.5 rounded-lg bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider">
+                    <p style="font-size:0.78rem;color:var(--ceroc-light-orange);margin-bottom:1.2rem;">This will clear your ${foundWords.length} found words from this device so you can play fresh.</p>
+                    <div style="display:flex;gap:0.6rem;">
+                        <button type="button" onclick="closeModal()" class="btn-ctrl" style="flex:1;">
                             Cancel
                         </button>
-                        <button onclick="confirmResetGame()" class="flex-1 py-2.5 rounded-lg bg-ceroc-highlight text-white font-bold text-xs uppercase tracking-wider">
+                        <button type="button" onclick="confirmResetGame()" class="btn-ctrl btn-enter" style="flex:1;">
                             Yes, Reset
                         </button>
                     </div>
@@ -1059,12 +1554,14 @@
             bonusUnlocked = false;
             selectedSequence = [];
             hintLevel = 0;
+            try {
+                localStorage.removeItem(STORAGE_KEY);
+            } catch (e) {}
             document.getElementById('bonusHintContainer').innerHTML = `
-                <button onclick="revealBonusHint()" id="hintBtn" class="text-xs bg-ceroc-orange/20 hover:bg-ceroc-orange/30 text-ceroc-lightOrange border border-ceroc-orange/50 px-2.5 py-1 rounded font-semibold uppercase tracking-wider transition">
+                <button type="button" onclick="revealBonusHint()" class="pill-btn" style="border-color:var(--ceroc-orange);">
                     Need a Clue?
                 </button>
             `;
-            saveProgress();
             updateScoreAndUI();
             renderWheel();
             closeModal();
@@ -1072,15 +1569,11 @@
         }
 
         function openModal() {
-            const overlay = document.getElementById('modalOverlay');
-            overlay.classList.remove('hidden');
-            overlay.classList.add('flex');
+            document.getElementById('modalOverlay').classList.add('open');
         }
 
         function closeModal() {
-            const overlay = document.getElementById('modalOverlay');
-            overlay.classList.add('hidden');
-            overlay.classList.remove('flex');
+            document.getElementById('modalOverlay').classList.remove('open');
         }
 
         /**************************************************************
@@ -1094,7 +1587,7 @@
             function resize() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-                stars = Array.from({ length: 55 }, () => ({
+                stars = Array.from({ length: 50 }, () => ({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
                     r: Math.random() * 1.8 + 0.5,
@@ -1165,7 +1658,6 @@
             frame();
         }
 
-        // Initialize on window load
         window.onload = function () {
             loadProgress();
             renderWheel();
