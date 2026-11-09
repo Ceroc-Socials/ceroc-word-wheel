@@ -746,23 +746,14 @@
         }
 
         function submitCurrentWord() {
-            // Smart Center 'E' Normalization: if the player tapped an outer 'E' without tapping the center 'E',
-            // automatically route the first 'E' to the center tile so any word containing 'E' uses the center letter.
-            if (!selectedSequence.includes('center')) {
-                const firstOuterEIdx = selectedSequence.findIndex(id => getLetterById(id) === 'E');
-                if (firstOuterEIdx !== -1) {
-                    selectedSequence[firstOuterEIdx] = 'center';
-                }
-            }
-
             const word = selectedSequence.map(getLetterById).join('');
             const box = document.getElementById('currentWordBox');
 
             if (word.length === 0) return;
 
-            // Rule 1: Must contain center letter 'E'
-            if (!word.includes('E')) {
-                triggerReject(box, 'Every word must contain the centre letter E!');
+            // Rule 1: Must physically select the orange centre 'E' tile ('center')
+            if (!selectedSequence.includes('center')) {
+                triggerReject(box, 'You must include the orange centre E tile!');
                 return;
             }
 
@@ -803,7 +794,6 @@
             saveProgress();
             updateScoreAndUI();
         }
-
         function triggerReject(element, message) {
             playSound('error');
             showFeedback(message, 'error');
