@@ -3,30 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Ceroc Word Wheel!</title>
+    <title>THE CEROC WORD WHEEL</title>
+
+    <!-- Open Graph / Facebook / WhatsApp Preview Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://glowsocial-uk.github.io/ceroc-word-wheel/" />
+    <meta property="og:title" content="THE CEROC WORD WHEEL" />
+    <meta property="og:description" content="Give your brain a little workout! How many words can you find? Find the 9-letter word connected to Ceroc!" />
+    <meta property="og:image" content="https://glowsocial-uk.github.io/ceroc-word-wheel/circular-logo.png" />
+    <meta property="og:image:secure_url" content="https://glowsocial-uk.github.io/ceroc-word-wheel/circular-logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
+
+    <!-- Official Ceroc Brand Fonts: Bebas Neue & Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- Tone.js for synthesized sound effects -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tone.js for Synthesized Sound Effects -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
-    <style>
-        :root {
-            --gold-light: #fde047;
-            --gold-mid: #f59e0b;
-            --orange-deep: #ea580c;
-            --cosmic-bg: #070913;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ceroc: {
+                            orange: '#F87B03',      /* Official Ceroc Dark Orange */
+                            lightOrange: '#FFA956', /* Official Ceroc Light Orange */
+                            highlight: '#D6336C',   /* Official Ceroc.com Highlight Pink */
+                            black: '#000000',
+                            white: '#FFFFFF'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Bebas Neue"', 'sans-serif'],
+                        body: ['"Montserrat"', 'sans-serif']
+                    }
+                }
+            }
         }
+    </script>
 
+    <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--cosmic-bg);
-            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
             overflow-x: hidden;
             user-select: none;
             -webkit-user-select: none;
@@ -38,41 +63,24 @@
             letter-spacing: 0.04em;
         }
 
-        .font-hand {
-            font-family: 'Caveat', cursive;
+        /* Brand-compliant dark background with bottom-to-top dark gradient */
+        .ceroc-bg {
+            background:
+                linear-gradient(to top, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.80) 55%, rgba(0, 0, 0, 0.92) 100%),
+                radial-gradient(circle at 50% 25%, rgba(248, 123, 3, 0.25) 0%, rgba(214, 51, 108, 0.08) 45%, #000000 80%);
         }
 
-        /* Cosmic Gradient & Sparkle Background */
-        .cosmic-bg {
-            background: 
-                radial-gradient(circle at 15% 10%, rgba(234, 88, 12, 0.25) 0%, transparent 40%),
-                radial-gradient(circle at 88% 12%, rgba(251, 191, 36, 0.28) 0%, transparent 45%),
-                radial-gradient(circle at 50% 45%, rgba(180, 83, 9, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 50% 100%, rgba(234, 88, 12, 0.2) 0%, transparent 50%),
-                linear-gradient(180deg, #05070f 0%, #0b1021 50%, #060811 100%);
-        }
-
-        /* Gradient Title Text matching the poster */
-        .title-gradient {
-            background: linear-gradient(90deg, #f97316 0%, #fbbf24 50%, #f97316 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 4px 12px rgba(249, 115, 22, 0.35));
-        }
-
-        /* Glowing Gold Wheel Ring */
+        /* Wheel Ring */
         .wheel-ring {
-            background: radial-gradient(circle, rgba(234, 88, 12, 0.25) 0%, rgba(15, 23, 42, 0.85) 68%, rgba(245, 158, 11, 0.3) 100%);
-            box-shadow: 
-                0 0 25px rgba(245, 158, 11, 0.45),
-                inset 0 0 25px rgba(245, 158, 11, 0.35);
-            border: 3px solid rgba(251, 191, 36, 0.75);
+            background: radial-gradient(circle, rgba(248, 123, 3, 0.18) 0%, rgba(0, 0, 0, 0.9) 70%, rgba(255, 169, 86, 0.22) 100%);
+            box-shadow: 0 0 25px rgba(248, 123, 3, 0.3), inset 0 0 20px rgba(248, 123, 3, 0.2);
+            border: 2px solid rgba(255, 169, 86, 0.6);
         }
 
         /* Outer Letter Tile */
         .letter-node {
-            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6), inset 0 -3px 0 rgba(0, 0, 0, 0.15);
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease, color 0.15s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
         }
 
         .letter-node:active {
@@ -80,34 +88,27 @@
         }
 
         .letter-node.selected {
-            background: linear-gradient(135deg, #fde047 0%, #f97316 100%);
-            color: #090d16;
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.9), inset 0 -3px 0 rgba(180, 83, 9, 0.4);
+            background-color: #F87B03 !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 0 18px rgba(248, 123, 3, 0.85);
             transform: translate(-50%, -50%) scale(1.08);
-            border: 2px solid #ffffff;
+            border: 2px solid #FFFFFF;
         }
 
         /* Center Mandatory Letter Tile */
         .center-node {
-            background: radial-gradient(circle at 30% 30%, #ea580c, #9a3412);
-            border: 3px solid #f97316;
-            box-shadow: 0 0 25px rgba(234, 88, 12, 0.8), inset 0 2px 6px rgba(255, 255, 255, 0.3);
-            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
+            background-color: #F87B03;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 0 22px rgba(248, 123, 3, 0.75);
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s ease;
         }
 
         .center-node.selected {
-            background: radial-gradient(circle at 30% 30%, #fbbf24, #ea580c);
-            border-color: #ffffff;
-            box-shadow: 0 0 30px rgba(251, 191, 36, 1), inset 0 2px 8px rgba(255, 255, 255, 0.6);
+            background-color: #FFFFFF;
+            color: #000000 !important;
+            border-color: #F87B03;
+            box-shadow: 0 0 28px rgba(255, 169, 86, 1);
             transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        /* Poster-inspired White Cards with Orange/Gold Borders */
-        .poster-card {
-            background: #ffffff;
-            color: #0f172a;
-            border: 3px solid #f59e0b;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 18px rgba(245, 158, 11, 0.25);
         }
 
         /* Shake Animation for Invalid Words */
@@ -132,20 +133,20 @@
 
         /* Custom Scrollbar for Found Words */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.4);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(245, 158, 11, 0.5);
+            background: rgba(248, 123, 3, 0.55);
             border-radius: 8px;
         }
     </style>
 </head>
-<body class="cosmic-bg min-h-screen flex flex-col justify-between relative selection:bg-amber-500 selection:text-black">
+<body class="ceroc-bg min-h-screen flex flex-col justify-between relative selection:bg-ceroc-orange selection:text-white">
 
     <!-- Background Starry Particle Canvas -->
     <canvas id="sparkleCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
@@ -153,82 +154,82 @@
     <!-- Celebration Confetti Canvas -->
     <canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
 
-    <!-- Top Navigation / Controls Bar -->
-    <header class="relative z-10 w-full max-w-4xl mx-auto px-4 pt-3 pb-1 flex items-center justify-between">
-        <!-- Sound Toggle -->
-        <button id="soundToggleBtn" onclick="toggleSound()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 border border-amber-500/40 text-amber-300 hover:bg-slate-800 text-xs font-semibold transition shadow">
-            <i id="soundIcon" class="ph-fill ph-speaker-high text-base"></i>
-            <span id="soundText" class="hidden sm:inline">Sound On</span>
-        </button>
+    <!-- Top Navigation / Utility Controls + Official Centered Logo -->
+    <header class="relative z-10 w-full max-w-4xl mx-auto px-4 pt-4 pb-2 flex flex-col items-center">
+        <!-- Top Utility Bar (Sound Toggle & Quick Rules Button) -->
+        <div class="w-full flex items-center justify-between mb-1">
+            <button id="soundToggleBtn" onclick="toggleSound()" class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 text-ceroc-lightOrange text-[11px] font-semibold uppercase tracking-wider transition">
+                <span id="soundText">Sound: On</span>
+            </button>
 
-        <!-- Ceroc Stylized Star Badge -->
-        <div class="flex flex-col items-center">
-            <div class="w-12 h-12 rounded-full bg-slate-950/90 border border-amber-500/50 flex flex-col items-center justify-center shadow-lg shadow-amber-500/10">
-                <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Dynamic Dance Star Emblem -->
-                    <path d="M50 8L58 38L88 32L63 52L76 85L50 64L24 85L37 52L12 32L42 38L50 8Z" fill="url(#cerocGrad)"/>
-                    <circle cx="50" cy="48" r="10" fill="#ffffff"/>
-                    <defs>
-                        <linearGradient id="cerocGrad" x1="12" y1="8" x2="88" y2="85" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#fde047"/>
-                            <stop offset="1" stop-color="#ea580c"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <span class="text-[8px] tracking-[0.22em] font-extrabold text-amber-100 mt-0.5">CEROC</span>
-            </div>
+            <button onclick="toggleRulesModal()" class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 text-ceroc-lightOrange text-[11px] font-semibold uppercase tracking-wider transition">
+                <span>Rules</span>
+            </button>
         </div>
 
-        <!-- Rules Modal Button (Mobile Quick Access) -->
-        <button onclick="toggleRulesModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 border border-amber-500/40 text-amber-300 hover:bg-slate-800 text-xs font-semibold transition shadow">
-            <i class="ph-fill ph-question text-base"></i>
-            <span>Rules</span>
-        </button>
+        <!-- OFFICIAL CEROC HEADER STACK (Centralised within Mobile Safe Zone) -->
+        <!-- 1. Official Round Black Circle Ceroc Logo (Clear space around it, zero added effects) -->
+        <div class="mb-3">
+            <img
+                src="./circular-logo.png"
+                alt="Ceroc"
+                class="w-20 h-20 rounded-full object-contain mx-auto"
+                onerror="this.outerHTML='<div class=\'w-20 h-20 rounded-full bg-black border border-white/25 flex items-center justify-center font-display text-2xl tracking-widest text-white\'>CEROC</div>'"
+            />
+        </div>
+
+        <!-- 2. Main Title: Bebas Neue Bold, ALL CAPS, White -->
+        <!-- 3. Horizontal White Underline: Exact same width as Title, equally spaced vertically -->
+        <div class="inline-flex flex-col items-center text-center">
+            <h1 class="font-display text-5xl sm:text-6xl md:text-7xl text-white uppercase leading-none tracking-wide">
+                THE CEROC WORD WHEEL
+            </h1>
+            <div class="w-full h-[2px] bg-white my-2.5"></div>
+        </div>
+
+        <!-- 4. Strapline: Montserrat Semi-Bold, ALL CAPS, White -->
+        <p class="font-body font-semibold text-xs sm:text-sm text-white uppercase tracking-widest text-center">
+            GIVE YOUR BRAIN A LITTLE WORKOUT!
+        </p>
+
+        <!-- 5. Further Detail Line: Montserrat, Title Case, Light Orange (#FFA956) -->
+        <p class="font-body font-normal text-xs sm:text-sm text-ceroc-lightOrange mt-1 text-center">
+            Bonus Challenge: Find the 9-letter word connected to Ceroc!
+        </p>
     </header>
 
     <!-- Main Content Container -->
     <main class="relative z-10 w-full max-w-4xl mx-auto px-4 py-2 flex-grow flex flex-col items-center">
-        
-        <!-- Poster Headlines -->
-        <div class="text-center mb-3">
-            <p class="font-display text-xl sm:text-2xl md:text-3xl tracking-wider text-white drop-shadow">
-                GIVE YOUR BRAIN A LITTLE WORKOUT!
-            </p>
-            <h1 class="font-display text-4xl sm:text-6xl md:text-7xl title-gradient leading-none mt-0.5">
-                The Ceroc Word Wheel!
-            </h1>
-        </div>
 
-        <!-- Live Score & Rank Bar -->
-        <div class="w-full max-w-2xl bg-slate-900/85 backdrop-blur-md border border-amber-500/40 rounded-2xl p-3 mb-4 shadow-lg">
+        <!-- Live Score & Rank Progress Bar -->
+        <div class="w-full max-w-2xl bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 mb-4 shadow-lg">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <div class="flex items-center gap-2">
-                    <span class="bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-extrabold text-xs uppercase px-2.5 py-1 rounded-lg shadow">
-                        <span id="rankBadgeText">Starting Out</span>
+                    <span class="bg-ceroc-orange text-white font-bold text-xs uppercase tracking-wider px-2.5 py-1 rounded">
+                        <span id="rankBadgeText">STARTING OUT</span>
                     </span>
-                    <span id="bonusBadge" class="hidden bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-400 text-slate-950 font-black text-xs px-2.5 py-1 rounded-lg shadow animate-pulse flex items-center gap-1">
-                        <i class="ph-fill ph-star"></i> 9-LETTER BONUS FOUND!
+                    <span id="bonusBadge" class="hidden bg-ceroc-lightOrange text-black font-extrabold text-xs uppercase tracking-wider px-2.5 py-1 rounded animate-pulse">
+                        9-LETTER BONUS FOUND!
                     </span>
                 </div>
-                <div class="text-right">
-                    <span class="text-xs text-slate-300">Words Found:</span>
-                    <span id="wordCountDisplay" class="font-extrabold text-amber-400 text-base ml-1">0</span>
-                    <span class="text-xs text-slate-400">/ <span id="totalPossibleDisplay">85</span></span>
+                <div class="text-right text-xs">
+                    <span class="text-white/70 uppercase tracking-wider font-semibold">Words Found:</span>
+                    <span id="wordCountDisplay" class="font-extrabold text-ceroc-orange text-base ml-1">0</span>
+                    <span class="text-white/50">/ <span id="totalPossibleDisplay">85</span></span>
                 </div>
             </div>
 
-            <!-- Tier Progress Bar -->
-            <div class="relative w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-700">
-                <div id="progressBarFill" class="h-full bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-300 transition-all duration-500 ease-out w-0 rounded-full"></div>
-                <!-- Tier Markers (10, 25, 40, 60) -->
-                <div class="absolute top-0 bottom-0 left-[16.6%] w-0.5 bg-slate-600/80" title="10: Warming Up"></div>
-                <div class="absolute top-0 bottom-0 left-[41.6%] w-0.5 bg-slate-600/80" title="25: In the Groove"></div>
-                <div class="absolute top-0 bottom-0 left-[66.6%] w-0.5 bg-slate-600/80" title="40: Word Wheel Legend"></div>
+            <!-- Tier Progress Bar with Markers (10, 25, 40, 60) -->
+            <div class="relative w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
+                <div id="progressBarFill" class="h-full bg-ceroc-orange transition-all duration-500 ease-out w-0 rounded-full"></div>
+                <div class="absolute top-0 bottom-0 left-[16.6%] w-0.5 bg-black/70" title="10: Warming Up"></div>
+                <div class="absolute top-0 bottom-0 left-[41.6%] w-0.5 bg-black/70" title="25: In the Groove"></div>
+                <div class="absolute top-0 bottom-0 left-[66.6%] w-0.5 bg-black/70" title="40: Word Wheel Legend"></div>
             </div>
-            <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-medium px-0.5">
+            <div class="flex justify-between text-[10px] text-white/60 mt-1.5 font-semibold uppercase tracking-wider px-0.5">
                 <span>0</span>
                 <span id="tier10Label">10+ Warming Up</span>
-                <span id="tier25Label">25+ In the Groove</span>
+                <span id="tier25Label">25+ Groove</span>
                 <span id="tier40Label">40+ Legend</span>
                 <span id="tier60Label">60+ Wizard!</span>
             </div>
@@ -236,46 +237,46 @@
 
         <!-- Two-Column Responsive Game Area -->
         <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            
-            <!-- Left / Center Column: Interactive Word Wheel & Controls -->
-            <div class="lg:col-span-7 flex flex-col items-center bg-slate-900/60 backdrop-blur-md border border-amber-500/30 rounded-3xl p-4 sm:p-5 shadow-2xl">
-                
+
+            <!-- Left Column: Interactive Word Wheel & Controls -->
+            <div class="lg:col-span-7 flex flex-col items-center bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 shadow-2xl">
+
                 <!-- Dynamic Toast / Feedback Message -->
                 <div class="h-7 flex items-center justify-center mb-1">
-                    <div id="feedbackToast" class="px-3 py-1 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 opacity-0 transform -translate-y-1">
-                        &nbsp;
+                    <div id="feedbackToast" class="px-3.5 py-1 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 opacity-0 transform -translate-y-1">
+                         
                     </div>
                 </div>
 
                 <!-- Current Word Display Slot -->
-                <div id="currentWordBox" class="w-full max-w-xs min-h-[54px] bg-slate-950/90 border-2 border-amber-500/60 rounded-2xl px-4 py-2 mb-4 flex items-center justify-center gap-1 shadow-inner">
-                    <span id="currentWordPlaceholder" class="text-slate-500 text-sm font-medium italic select-none">
-                        Tap letters or type...
+                <div id="currentWordBox" class="w-full max-w-xs min-h-[54px] bg-white/5 border border-white/20 rounded-xl px-4 py-2 mb-4 flex items-center justify-center gap-1">
+                    <span id="currentWordPlaceholder" class="text-white/35 text-xs font-semibold uppercase tracking-widest select-none">
+                        TAP LETTERS OR TYPE...
                     </span>
                     <div id="currentWordLetters" class="flex items-center justify-center gap-1 flex-wrap"></div>
                 </div>
 
                 <!-- Interactive Wheel Container -->
                 <div class="relative w-[280px] h-[280px] sm:w-[310px] sm:h-[310px] flex items-center justify-center my-1">
-                    
-                    <!-- Outer Decorative Golden Ring -->
-                    <div class="wheel-ring absolute inset-3 rounded-full pointer-events-none"></div>
-                    <div class="absolute inset-6 rounded-full border border-amber-300/30 pointer-events-none"></div>
 
-                    <!-- SVG Spoke Lines & Active Path Line -->
+                    <!-- Outer Ring -->
+                    <div class="wheel-ring absolute inset-3 rounded-full pointer-events-none"></div>
+                    <div class="absolute inset-6 rounded-full border border-white/15 pointer-events-none"></div>
+
+                    <!-- SVG Spoke Lines & Active Selection Trail -->
                     <svg id="wheelSvg" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 300">
                         <!-- Static White Spokes from Center (150,150) to 8 Outer Nodes -->
-                        <g id="staticSpokes" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.9"></g>
+                        <g id="staticSpokes" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.85"></g>
                         <!-- Dynamic Selection Trail -->
-                        <polyline id="selectionPolyline" fill="none" stroke="#fde047" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4" opacity="0.85"></polyline>
+                        <polyline id="selectionPolyline" fill="none" stroke="#FFA956" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4" opacity="0.95"></polyline>
                     </svg>
 
                     <!-- Center Mandatory Letter Node ('E') -->
                     <button id="node-center" onclick="handleNodeTap('center')" aria-label="Center Letter E"
-                        class="center-node absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[78px] h-[78px] sm:w-[86px] sm:h-[86px] rounded-full flex items-center justify-center text-white font-black text-4xl sm:text-5xl z-20 cursor-pointer focus:outline-none">
+                        class="center-node absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[78px] h-[78px] sm:w-[86px] sm:h-[86px] rounded-full flex items-center justify-center text-white font-display text-5xl sm:text-6xl z-20 cursor-pointer focus:outline-none">
                         E
-                        <span class="absolute -bottom-1 bg-amber-300 text-slate-950 text-[9px] font-black px-1.5 py-0.2 rounded uppercase tracking-wider shadow">
-                            Center
+                        <span class="absolute -bottom-1.5 bg-white text-black font-body text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase tracking-wider shadow">
+                            CENTRE
                         </span>
                     </button>
 
@@ -285,114 +286,101 @@
 
                 <!-- Interactive Action Buttons -->
                 <div class="w-full max-w-sm grid grid-cols-4 gap-2.5 mt-4">
-                    <button onclick="shuffleOuterLetters()" class="col-span-1 flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-amber-300 border border-amber-500/30 font-semibold text-xs transition shadow">
-                        <i class="ph-bold ph-shuffle text-lg mb-0.5"></i>
-                        <span>Shuffle</span>
+                    <button onclick="shuffleOuterLetters()" class="col-span-1 flex items-center justify-center py-3 px-2 rounded-lg bg-white/10 hover:bg-white/15 active:scale-95 text-white font-semibold text-xs uppercase tracking-wider transition">
+                        Shuffle
                     </button>
 
-                    <button onclick="deleteLastLetter()" class="col-span-1 flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 border border-slate-600 font-semibold text-xs transition shadow">
-                        <i class="ph-bold ph-backspace text-lg mb-0.5"></i>
-                        <span>Delete</span>
+                    <button onclick="deleteLastLetter()" class="col-span-1 flex items-center justify-center py-3 px-2 rounded-lg bg-white/10 hover:bg-white/15 active:scale-95 text-white font-semibold text-xs uppercase tracking-wider transition">
+                        Delete
                     </button>
 
-                    <button onclick="clearCurrentWord()" class="col-span-1 flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 border border-slate-600 font-semibold text-xs transition shadow">
-                        <i class="ph-bold ph-x-circle text-lg mb-0.5"></i>
-                        <span>Clear</span>
+                    <button onclick="clearCurrentWord()" class="col-span-1 flex items-center justify-center py-3 px-2 rounded-lg bg-white/10 hover:bg-white/15 active:scale-95 text-white font-semibold text-xs uppercase tracking-wider transition">
+                        Clear
                     </button>
 
-                    <button onclick="submitCurrentWord()" class="col-span-1 flex flex-col items-center justify-center py-2.5 px-2 rounded-xl bg-gradient-to-b from-amber-400 to-orange-600 hover:from-amber-300 hover:to-orange-500 active:scale-95 text-slate-950 font-black text-xs uppercase tracking-wide transition shadow-lg shadow-orange-600/30">
-                        <i class="ph-bold ph-check-circle text-lg mb-0.5"></i>
-                        <span>Enter</span>
+                    <button onclick="submitCurrentWord()" class="col-span-1 flex items-center justify-center py-3 px-2 rounded-lg bg-ceroc-highlight hover:opacity-95 active:scale-95 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg">
+                        Enter
                     </button>
                 </div>
 
                 <!-- Bonus 9-Letter Hint Bar -->
-                <div class="w-full max-w-sm mt-3.5 pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <div class="flex items-center gap-1.5 text-amber-300 font-semibold">
-                        <i class="ph-fill ph-sparkle text-amber-400"></i>
+                <div class="w-full max-w-sm mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
+                    <div class="text-ceroc-lightOrange font-semibold uppercase tracking-wider">
                         <span>9-Letter Ceroc Bonus:</span>
                     </div>
                     <div id="bonusHintContainer" class="flex items-center gap-2">
-                        <button onclick="revealBonusHint()" id="hintBtn" class="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-lg font-semibold transition">
+                        <button onclick="revealBonusHint()" id="hintBtn" class="text-xs bg-ceroc-orange/20 hover:bg-ceroc-orange/30 text-ceroc-lightOrange border border-ceroc-orange/50 px-2.5 py-1 rounded font-semibold uppercase tracking-wider transition">
                             Need a Clue?
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Rules Card & Found Words Bank -->
+            <!-- Right Column: Found Words Bank & Official Rules -->
             <div class="lg:col-span-5 flex flex-col gap-4">
-                
+
                 <!-- Found Words Panel -->
-                <div class="bg-slate-900/80 backdrop-blur-md border border-amber-500/40 rounded-3xl p-4 shadow-xl flex flex-col">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-2.5">
-                        <div class="flex items-center gap-2">
-                            <i class="ph-fill ph-trophy text-amber-400 text-lg"></i>
-                            <h2 class="font-bold text-sm sm:text-base text-white">Your Found Words</h2>
-                        </div>
-                        <button onclick="shareScore()" class="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 font-extrabold text-xs px-3 py-1.5 rounded-full shadow transition active:scale-95">
-                            <i class="ph-bold ph-share-network"></i>
-                            <span>Share Score</span>
+                <div class="bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 shadow-xl flex flex-col">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-2.5 mb-2.5">
+                        <h2 class="font-display text-2xl sm:text-3xl text-white uppercase tracking-wide leading-none">YOUR FOUND WORDS</h2>
+                        <button onclick="shareScore()" class="bg-ceroc-highlight hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider px-3.5 py-1.5 rounded transition active:scale-95">
+                            Share Score
                         </button>
                     </div>
 
                     <!-- Scrollable Word Pills List -->
                     <div id="foundWordsList" class="min-h-[120px] max-h-[190px] overflow-y-auto flex flex-wrap content-start gap-1.5 p-1">
-                        <p id="emptyWordsPrompt" class="text-slate-400 text-xs italic w-full text-center py-8">
-                            Words you find will appear here. Remember every word must contain <strong class="text-amber-400">E</strong>!
+                        <p id="emptyWordsPrompt" class="text-white/45 text-xs w-full text-center py-8">
+                            Words you find will appear here. Remember every word must contain <strong class="text-ceroc-lightOrange">E</strong>!
                         </p>
                     </div>
                 </div>
 
-                <!-- Poster-Style "THE RULES" Card -->
-                <div class="poster-card rounded-3xl p-4 sm:p-5">
-                    <h2 class="font-display text-3xl sm:text-4xl text-center text-slate-950 border-b-2 border-slate-900 pb-1 mb-3">
-                        THE RULES
-                    </h2>
-                    <ul class="space-y-2.5 text-xs sm:text-sm font-semibold text-slate-900">
-                        <li class="flex items-start gap-2">
-                            <span class="text-orange-500 text-base leading-none mt-0.5">✦</span>
-                            <span>Every word must contain the centre letter <strong class="text-orange-600 font-extrabold">E</strong>.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-orange-500 text-base leading-none mt-0.5">✦</span>
-                            <span>Words must be at least <strong>3 letters</strong> long.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-orange-500 text-base leading-none mt-0.5">✦</span>
-                            <span>You can only use each letter tile as many times as it appears.</span>
-                        </li>
-                        <li class="flex items-start gap-2 bg-amber-100/90 border border-amber-400 rounded-xl p-2">
-                            <span class="text-orange-600 text-base leading-none mt-0.5">✦</span>
-                            <span><strong class="text-orange-700">BONUS CHALLENGE:</strong> Find the 9-letter word connected to Ceroc!</span>
-                        </li>
-                    </ul>
+                <!-- On-Brand "THE RULES" Panel (No prohibited bullet icons or white box frames) -->
+                <div class="bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5">
+                    <div class="inline-flex flex-col items-start mb-2">
+                        <h2 class="font-display text-3xl text-white uppercase leading-none tracking-wide">
+                            THE RULES
+                        </h2>
+                        <div class="w-full h-[2px] bg-white my-1.5"></div>
+                    </div>
+                    <div class="space-y-2.5 text-xs sm:text-sm text-white/90 leading-relaxed">
+                        <p>Every word must contain the centre letter <strong class="text-ceroc-lightOrange font-bold">E</strong>.</p>
+                        <p>Words must be at least <strong class="text-white font-bold">3 letters</strong> long.</p>
+                        <p>You can only use each letter tile as many times as it appears.</p>
+                        <p class="pt-1 text-ceroc-lightOrange font-semibold">
+                            <strong class="text-ceroc-orange uppercase">BONUS CHALLENGE:</strong> Find the 9-letter word connected to Ceroc!
+                        </p>
+                    </div>
                 </div>
 
             </div>
         </div>
 
-        <!-- Bottom Poster Banner: "How many can you find?" -->
+        <!-- Bottom Milestone Banner: "HOW MANY CAN YOU FIND?" -->
         <div class="w-full max-w-4xl mt-5">
-            <div class="poster-card rounded-3xl p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 items-center gap-4">
-                <div class="md:col-span-5 text-center md:border-r-2 md:border-slate-900 pr-2">
-                    <p class="font-hand text-3xl sm:text-4xl text-slate-950 leading-tight transform -rotate-2">
-                        How many<br>can you find?
-                    </p>
-                    <div class="w-28 h-1 bg-slate-900 mx-auto mt-1 rounded-full transform -rotate-2"></div>
+            <div class="bg-black/80 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 items-center gap-4">
+                <div class="md:col-span-5 text-center md:border-r border-white/15 pr-2 flex flex-col items-center">
+                    <div class="inline-flex flex-col items-center">
+                        <p class="font-display text-3xl sm:text-4xl text-white uppercase leading-none tracking-wide">
+                            HOW MANY CAN YOU FIND?
+                        </p>
+                        <div class="w-full h-[2px] bg-white my-2"></div>
+                    </div>
+                    <span class="text-xs text-ceroc-lightOrange">Climb the ranks from Warming Up to Word Wizard!</span>
                 </div>
-                <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm font-extrabold text-slate-900">
-                    <div id="rankRow10" class="flex items-center gap-2 p-1.5 rounded-lg transition">
-                        <span class="text-orange-600 font-black">10+</span> = Warming Up
+                <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm font-semibold text-white">
+                    <div id="rankRow10" class="flex items-center gap-2 p-2 rounded transition">
+                        <span class="text-ceroc-orange font-extrabold">10+</span> = Warming Up
                     </div>
-                    <div id="rankRow25" class="flex items-center gap-2 p-1.5 rounded-lg transition">
-                        <span class="text-orange-600 font-black">25+</span> = In the Groove
+                    <div id="rankRow25" class="flex items-center gap-2 p-2 rounded transition">
+                        <span class="text-ceroc-orange font-extrabold">25+</span> = In the Groove
                     </div>
-                    <div id="rankRow40" class="flex items-center gap-2 p-1.5 rounded-lg transition">
-                        <span class="text-orange-600 font-black">40+</span> = Word Wheel Legend
+                    <div id="rankRow40" class="flex items-center gap-2 p-2 rounded transition">
+                        <span class="text-ceroc-orange font-extrabold">40+</span> = Word Wheel Legend
                     </div>
-                    <div id="rankRow60" class="flex items-center gap-2 p-1.5 rounded-lg transition">
-                        <span class="text-orange-600 font-black">60+</span> = Word Wizard!
+                    <div id="rankRow60" class="flex items-center gap-2 p-2 rounded transition">
+                        <span class="text-ceroc-orange font-extrabold">60+</span> = Word Wizard!
                     </div>
                 </div>
             </div>
@@ -402,26 +390,26 @@
 
     <!-- Social Media Call-To-Action Footer -->
     <footer class="relative z-10 w-full max-w-4xl mx-auto px-4 py-4 mt-2 text-center">
-        <div class="bg-slate-900/90 border border-amber-500/30 rounded-2xl px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div class="text-left">
-                <p class="text-xs sm:text-sm font-bold text-amber-300">Ready for a real workout on the dancefloor?</p>
-                <p class="text-[11px] text-slate-300">Drop your score in the comments & join us at your local Ceroc class!</p>
+        <div class="bg-black/85 border border-white/15 rounded-2xl px-4 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="text-center sm:text-left">
+                <p class="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">Ready for a real workout on the dancefloor?</p>
+                <p class="text-xs text-ceroc-lightOrange mt-0.5">Drop your score in the comments & join us at your local Ceroc class!</p>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="resetGamePrompt()" class="text-xs text-slate-400 hover:text-white px-3 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 transition">
+            <div class="flex items-center gap-2.5">
+                <button onclick="resetGamePrompt()" class="text-xs text-white/60 hover:text-white px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 font-semibold uppercase tracking-wider transition">
                     Reset Progress
                 </button>
-                <a href="https://www.ceroc.com" target="_blank" rel="noopener noreferrer" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs px-4 py-2 rounded-xl shadow transition whitespace-nowrap">
-                    Find a Class 🕺
+                <a href="https://www.ceroc.com" target="_blank" rel="noopener noreferrer" class="bg-ceroc-highlight hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-lg shadow transition whitespace-nowrap">
+                    Find a Class
                 </a>
             </div>
         </div>
     </footer>
 
-    <!-- Rules & Share Modal -->
-    <div id="modalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div id="modalContent" class="poster-card max-w-md w-full rounded-3xl p-6 relative animate-popIn">
-            <button onclick="closeModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-900 flex items-center justify-center font-bold">
+    <!-- Rules, Share & Reset Modal -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div id="modalContent" class="bg-black border border-white/25 max-w-md w-full rounded-2xl p-6 relative text-white shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center font-bold text-sm">
                 ✕
             </button>
             <div id="modalBody"></div>
@@ -438,11 +426,11 @@
             // 9-Letter Ceroc Bonus Word
             "FREESTYLE",
             // 8-Letter Words
-            "FLEETERS", "FREESTER", "FRETTERS", "LETTERER", " L E T T E R E R ".trim(), "REFELLET", "RESETTER", "RESETTLE", "SHELTERY", "STEELERY",
+            "FLEETERS", "FREESTER", "FRETTERS", "LETTERER", "REFELLET", "RESETTER", "RESETTLE", "SHELTERY", "STEELERY",
             // 7-Letter Words
             "EELFRYS", "FEELERS", "FEETLES", "FELTERS", "FERRETS", "FERRETY", "FESTERS", "FETTERS", "FLEERER", "FLEETER",
             "FLEETLY", "FLIRTER", "FLYTIER", "FREERS", "FRETTER", "FRYERS", "LEERIER", "LEFTIES", "LETTERS", "LITTERY",
-            "REEFERS", "REELERS", "REFELTS", "RETRIES", "R E S E T T E", "S E L F E R S", "S E T T L E R", "SETTLER", "SLEETER", "STEELER",
+            "REEFERS", "REELERS", "REFELTS", "RETRIES", "RESETTE", "SELFERS", "SETTLER", "SLEETER", "STEELER",
             "STEERER", "STERLET", "STYLERS", "TEETERS", "TEETERY", "TELFERS", "TERSELY", "TESTERS", "TESTILY", "TREELET",
             "TRESTLE", "YELLERS",
             // 6-Letter Words
@@ -456,7 +444,7 @@
             "TEELER", "TEETER", "TELFER", "TELLER", "TERSER", "TESTER", "TESTES", "TETHER", "TREES", "TSETSE",
             "TYREES", "YELLER",
             // 5-Letter Words
-            "EELER", "EERIE", "EFTS", "ELate", "ELFES", "ELITE", "ELSES", "ESTER", "EYERS", "EYRES",
+            "EELER", "EERIE", "EFTS", "ELATE", "ELFES", "ELITE", "ELSES", "ESTER", "EYERS", "EYRES",
             "FEELS", "FEELY", "FEESE", "FEETS", "FELTS", "FELTY", "FERES", "FERLY", "FERRY", "FESTS",
             "FETES", "FEYER", "FEYLY", "FLEER", "FLEES", "FLEET", "FLIER", "FLIES", "FLYER", "FLYTE",
             "FREER", "FREES", "FRETS", "FRYER", "FRYES", "LEERS", "LEERY", "LEETS", "LEFTS", "LEFTY",
@@ -467,27 +455,27 @@
             "TEERS", "TELES", "TELLS", "TELLY", "TERES", "TERFE", "TERSE", "TESTS", "TESTY", "TREES",
             "TREYS", "TYERS", "TYRES", "YELLS", "YELTS",
             // 4-Letter Words
-            "EELS", "EELY", "EERY", "EFTS", "ELSE", "ERES", "ERFS", "ERRS", "ERST", "ESES",
+            "EELS", "EELY", "EERY", "EFTS", "ELFE", "ELFS", "ELSE", "ERES", "ERFS", "ERRS", "ERST", "ESES",
             "ESTS", "ETES", "EYER", "EYES", "EYRE", "EYRY", "FEEL", "FEER", "FEES", "FEET",
             "FELT", "FERE", "FEST", "FETE", "FETS", "FEYS", "FLEE", "FLEY", "FREE", "FRET",
             "LEER", "LEES", "LEET", "LEFT", "LERE", "LEST", "LETS", "LEYE", "LEYS", "LIFE",
-            "LYRE", "REEF", "REEL", "REES", "REFS", "REFT", "RELY", "REST", "RETE", "RETS",
+            "LYRE", "LYSE", "REEF", "REEL", "REES", "REFS", "REFT", "RELY", "REST", "RETE", "RETS",
             "RYES", "SEEL", "SEER", "SEES", "SELF", "SELL", "SERE", "SERF", "SETS", "SETT",
-            "SLEE", "SLEY", "STEY", "STYE", "TEEL", "TEER", "TEES", "TELE", "TELL", "TELS",
-            "TERF", "TEST", "TETE", "TREE", "TREF", "TRES", "TRET", "TREY", "TYER", "TYES",
-            "TYRE", "YEES", "YELL", "YELP", "YELT", "YERK", "YEST", "YETE", "YETS",
+            "SLEE", "SLEY", "STEL", "STEY", "STYE", "TEEL", "TEER", "TEES", "TEFS", "TELE", "TELL", "TELS",
+            "TERE", "TERF", "TEST", "TETE", "TREE", "TREF", "TRES", "TRET", "TREY", "TYER", "TYES",
+            "TYRE", "YEES", "YELL", "YELP", "YELS", "YELT", "YERK", "YEST", "YETE", "YETS",
             // 3-Letter Words
-            "EEL", "EER", "EFT", "ELF", "ELS", "ELT", "ERE", "ERF", "ERR", "ERS",
+            "EEL", "EER", "EFT", "ELF", "ELS", "ELT", "EME", "ERE", "ERF", "ERR", "ERS",
             "ESE", "EST", "ETE", "EYE", "FEE", "FER", "FES", "FET", "FEY", "LEE",
             "LES", "LET", "LEY", "LYE", "REE", "REF", "REI", "RES", "RET", "RYE",
-            "SEE", "SEI", "SEL", "SER", "SET", "SEY", "SYE", "TEE", "TEL", "TES",
-            "TET", "TYE", "YEE", "YES", "YET"
+            "SEE", "SEI", "SEL", "SER", "SET", "SEY", "SYE", "TEE", "TEF", "TEL", "TES",
+            "TET", "TYE", "YEE", "YEL", "YER", "YES", "YET"
         ];
 
         // Available letter frequencies in the wheel: E:3, F:1, L:1, R:1, S:1, T:1, Y:1
         const WHEEL_LETTER_COUNTS = { E: 3, F: 1, L: 1, R: 1, S: 1, T: 1, Y: 1 };
 
-        // Helper to verify if any word can be strictly formed from WHEEL_LETTER_COUNTS & contains 'E'
+        // Verify if word can be strictly formed from WHEEL_LETTER_COUNTS & contains 'E'
         function canFormFromWheel(word) {
             const upper = word.toUpperCase().trim();
             if (upper.length < 3 || upper.length > 9) return false;
@@ -525,7 +513,6 @@
             { id: 'outer-7', letter: 'E', angleDeg: 225 }
         ];
 
-        // Track sequence of selected node IDs for the current word (e.g., ['outer-3', 'outer-1', 'center', ...])
         let selectedSequence = [];
         let foundWords = [];
         let bonusUnlocked = false;
@@ -579,22 +566,17 @@
                     synth.triggerAttackRelease('F#3', '16n', now);
                     synth.triggerAttackRelease('F3', '8n', now + 0.08);
                 }
-            } catch (e) {
-                // Ignore audio context restrictions if not yet interacted
-            }
+            } catch (e) {}
         }
 
         function toggleSound() {
             soundEnabled = !soundEnabled;
-            const icon = document.getElementById('soundIcon');
             const text = document.getElementById('soundText');
             if (soundEnabled) {
-                icon.className = 'ph-fill ph-speaker-high text-base';
-                text.textContent = 'Sound On';
+                text.textContent = 'Sound: On';
                 playSound('tap');
             } else {
-                icon.className = 'ph-fill ph-speaker-slash text-base text-slate-400';
-                text.textContent = 'Muted';
+                text.textContent = 'Sound: Off';
             }
         }
 
@@ -607,11 +589,11 @@
             container.innerHTML = '';
             spokesGroup.innerHTML = '';
 
-            const radiusPct = 36.5; // Percentage from center (50%, 50%)
+            const radiusPct = 36.5;
             const svgCenter = 150;
-            const svgRadius = 109.5; // 36.5% of 300
+            const svgRadius = 109.5;
 
-            outerNodes.forEach((node, idx) => {
+            outerNodes.forEach((node) => {
                 const rad = (node.angleDeg * Math.PI) / 180;
                 const xPct = 50 + radiusPct * Math.cos(rad);
                 const yPct = 50 + radiusPct * Math.sin(rad);
@@ -632,7 +614,7 @@
                 btn.type = 'button';
                 btn.setAttribute('aria-label', `Outer Letter ${node.letter}`);
                 const isSelected = selectedSequence.includes(node.id);
-                btn.className = `letter-node absolute w-[62px] h-[62px] sm:w-[68px] sm:h-[68px] rounded-full bg-white text-slate-950 font-black text-3xl sm:text-4xl flex items-center justify-center z-20 cursor-pointer focus:outline-none ${isSelected ? 'selected' : ''}`;
+                btn.className = `letter-node absolute w-[62px] h-[62px] sm:w-[68px] sm:h-[68px] rounded-full bg-white text-black font-display text-4xl sm:text-5xl flex items-center justify-center z-20 cursor-pointer focus:outline-none ${isSelected ? 'selected' : ''}`;
                 btn.style.left = `${xPct}%`;
                 btn.style.top = `${yPct}%`;
                 btn.style.transform = 'translate(-50%, -50%)';
@@ -699,10 +681,10 @@
                 const letter = getLetterById(nodeId);
                 const isCenter = nodeId === 'center';
                 const badge = document.createElement('span');
-                badge.className = `letter-pop inline-flex items-center justify-center w-8 h-9 sm:w-9 sm:h-10 rounded-xl font-black text-lg sm:text-xl shadow ${
+                badge.className = `letter-pop inline-flex items-center justify-center w-8 h-9 sm:w-9 sm:h-10 rounded-lg font-display text-2xl sm:text-3xl shadow ${
                     isCenter
-                        ? 'bg-gradient-to-b from-orange-500 to-amber-600 text-white border border-amber-300'
-                        : 'bg-white text-slate-950'
+                        ? 'bg-ceroc-orange text-white border border-white'
+                        : 'bg-white text-black'
                 }`;
                 badge.textContent = letter;
                 lettersContainer.appendChild(badge);
@@ -721,7 +703,7 @@
                 return;
             }
 
-            // If already in sequence earlier, ignore or give subtle feedback
+            // If already in sequence earlier, notify player
             if (selectedSequence.includes(nodeId)) {
                 showFeedback('Each letter tile can only be used once per word!', 'warn');
                 playSound('error');
@@ -750,7 +732,6 @@
         }
 
         function shuffleOuterLetters() {
-            // Remember current letters by converting selected outer IDs to letters
             clearCurrentWord();
             const letters = outerNodes.map(n => n.letter);
             for (let i = letters.length - 1; i > 0; i--) {
@@ -765,13 +746,21 @@
         }
 
         function submitCurrentWord() {
+            // Smart Center 'E' Normalization: if the player tapped an outer 'E' without tapping the center 'E',
+            // automatically route the first 'E' to the center tile so any word containing 'E' uses the center letter.
+            if (!selectedSequence.includes('center')) {
+                const firstOuterEIdx = selectedSequence.findIndex(id => getLetterById(id) === 'E');
+                if (firstOuterEIdx !== -1) {
+                    selectedSequence[firstOuterEIdx] = 'center';
+                }
+            }
+
             const word = selectedSequence.map(getLetterById).join('');
             const box = document.getElementById('currentWordBox');
 
             if (word.length === 0) return;
 
             // Rule 1: Must contain center letter 'E'
-            // Note: Even if the user clicked an outer 'E' instead of the center 'E', any word with 'E' uses the mandatory E!
             if (!word.includes('E')) {
                 triggerReject(box, 'Every word must contain the centre letter E!');
                 return;
@@ -791,7 +780,7 @@
 
             // Check dictionary validity
             if (!VALID_WORDS.has(word)) {
-                triggerReject(box, `"${word}" is not in the Ceroc Word Wheel list`);
+                triggerReject(box, `"${word}" is not in the Word Wheel list`);
                 return;
             }
 
@@ -804,10 +793,10 @@
                 bonusUnlocked = true;
                 playSound('bonus');
                 launchConfetti(140);
-                showFeedback('🎉 AMAZING! 9-Letter Ceroc Bonus "FREESTYLE" Found!', 'bonus');
+                showFeedback('AMAZING! 9-LETTER CEROC BONUS "FREESTYLE" FOUND!', 'bonus');
             } else {
                 playSound('success');
-                const praise = word.length >= 6 ? '🔥 Fantastic word!' : '✨ Nice one!';
+                const praise = word.length >= 6 ? 'FANTASTIC WORD!' : 'NICE ONE!';
                 showFeedback(`${praise} +1 (${word})`, 'success');
             }
 
@@ -819,7 +808,7 @@
             playSound('error');
             showFeedback(message, 'error');
             element.classList.remove('animate-shake');
-            void element.offsetWidth; // trigger reflow
+            void element.offsetWidth;
             element.classList.add('animate-shake');
             setTimeout(() => {
                 selectedSequence = [];
@@ -830,14 +819,14 @@
         function showFeedback(msg, type = 'info') {
             const toast = document.getElementById('feedbackToast');
             toast.textContent = msg;
-            toast.className = 'px-3.5 py-1 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 opacity-100 transform translate-y-0 shadow-lg ';
+            toast.className = 'px-3.5 py-1 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 opacity-100 transform translate-y-0 shadow-lg ';
 
             if (type === 'error' || type === 'warn') {
-                toast.className += 'bg-red-500/90 text-white border border-red-300';
+                toast.className += 'bg-ceroc-highlight text-white';
             } else if (type === 'bonus') {
-                toast.className += 'bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-500 text-slate-950 border border-white scale-105';
+                toast.className += 'bg-ceroc-orange text-white border border-white scale-105';
             } else {
-                toast.className += 'bg-amber-400 text-slate-950 border border-amber-200';
+                toast.className += 'bg-ceroc-lightOrange text-black';
             }
 
             clearTimeout(window.feedbackTimer);
@@ -847,7 +836,7 @@
             }, 2600);
         }
 
-        // Physical Keyboard Support
+        // Physical Keyboard Support (Prioritizes Center 'E' first, Spacebar shuffles)
         window.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey || e.altKey) return;
             const key = e.key.toUpperCase();
@@ -865,12 +854,11 @@
                 e.preventDefault();
                 shuffleOuterLetters();
             } else if (/^[A-Z]$/.test(key)) {
-                // If user types 'E', prioritize picking 'center' first so they always satisfy the center E rule!
+                // Prioritize picking 'center' E first so players always satisfy the mandatory center rule
                 if (key === 'E' && !selectedSequence.includes('center')) {
                     handleNodeTap('center');
                     return;
                 }
-                // Otherwise find an unselected outer node matching the key
                 const match = outerNodes.find(n => n.letter === key && !selectedSequence.includes(n.id));
                 if (match) {
                     handleNodeTap(match.id);
@@ -900,7 +888,6 @@
             const rank = getRankTitle(count);
             document.getElementById('rankBadgeText').textContent = rank;
 
-            // Progress bar (scales up to 60 for Word Wizard!)
             const pct = Math.min(100, (count / 60) * 100);
             document.getElementById('progressBarFill').style.width = `${pct}%`;
 
@@ -914,9 +901,9 @@
             tiers.forEach(t => {
                 const el = document.getElementById(t.id);
                 if (count >= t.min) {
-                    el.className = 'flex items-center gap-2 p-1.5 rounded-xl bg-amber-100 border border-amber-400 text-slate-950 font-black transition';
+                    el.className = 'flex items-center gap-2 p-2 rounded-lg bg-ceroc-orange/20 border border-ceroc-orange text-white font-bold transition';
                 } else {
-                    el.className = 'flex items-center gap-2 p-1.5 rounded-lg text-slate-800 transition';
+                    el.className = 'flex items-center gap-2 p-2 rounded-lg text-white/75 transition';
                 }
             });
 
@@ -926,8 +913,8 @@
                 bonusUnlocked = true;
                 bonusBadge.classList.remove('hidden');
                 document.getElementById('bonusHintContainer').innerHTML = `
-                    <span class="text-xs font-black text-amber-400 bg-amber-500/20 px-2.5 py-1 rounded-lg border border-amber-400/50">
-                        ★ FREESTYLE ★
+                    <span class="text-xs font-extrabold text-ceroc-orange bg-ceroc-orange/15 px-2.5 py-1 rounded border border-ceroc-orange">
+                        FREESTYLE
                     </span>
                 `;
             } else {
@@ -938,8 +925,8 @@
             const listEl = document.getElementById('foundWordsList');
             if (count === 0) {
                 listEl.innerHTML = `
-                    <p id="emptyWordsPrompt" class="text-slate-400 text-xs italic w-full text-center py-8">
-                        Words you find will appear here. Remember every word must contain <strong class="text-amber-400">E</strong>!
+                    <p id="emptyWordsPrompt" class="text-white/45 text-xs w-full text-center py-8">
+                        Words you find will appear here. Remember every word must contain <strong class="text-ceroc-lightOrange">E</strong>!
                     </p>
                 `;
             } else {
@@ -948,9 +935,9 @@
                     const isBonus = w === 'FREESTYLE';
                     const pill = document.createElement('span');
                     pill.className = isBonus
-                        ? 'px-3 py-1 rounded-full text-xs font-black bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-500 text-slate-950 shadow-md flex items-center gap-1'
-                        : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800 text-amber-100 border border-slate-700';
-                    pill.innerHTML = isBonus ? `<i class="ph-fill ph-star"></i> ${w}` : w;
+                        ? 'px-3 py-1 rounded text-xs font-extrabold bg-ceroc-orange text-white shadow-md uppercase tracking-wider'
+                        : 'px-2.5 py-1 rounded text-xs font-semibold bg-white/10 text-white border border-white/15 uppercase tracking-wider';
+                    pill.textContent = w;
                     listEl.appendChild(pill);
                 });
             }
@@ -961,18 +948,18 @@
             const container = document.getElementById('bonusHintContainer');
             if (hintLevel === 1) {
                 container.innerHTML = `
-                    <span class="text-xs text-amber-200 italic">Starts with <strong>F R E...</strong></span>
-                    <button onclick="revealBonusHint()" class="text-[11px] underline text-amber-400 ml-1">More</button>
+                    <span class="text-xs text-ceroc-lightOrange">Starts with <strong class="text-white">F R E...</strong></span>
+                    <button onclick="revealBonusHint()" class="text-[11px] underline text-white font-semibold ml-1">More</button>
                 `;
             } else {
                 container.innerHTML = `
-                    <span class="text-xs text-amber-200 italic">Clue: Unchoreographed social dancing (<strong>F R E E _ _ _ _ E</strong>)</span>
+                    <span class="text-xs text-ceroc-lightOrange">Unchoreographed social dancing (<strong class="text-white">F R E E _ _ _ _ E</strong>)</span>
                 `;
             }
         }
 
         /**************************************************************
-         * 7. LOCAL STORAGE & SOCIAL SHARING
+         * 7. LOCAL STORAGE & SOCIAL SHARING MODALS
          **************************************************************/
         function saveProgress() {
             try {
@@ -1000,9 +987,9 @@
             const count = foundWords.length;
             const rank = getRankTitle(count);
             const bonusText = bonusUnlocked
-                ? 'and unlocked the 9-letter Ceroc bonus word! 🌟'
+                ? 'and unlocked the 9-letter Ceroc bonus word!'
                 : 'so far!';
-            const shareText = `🕺 The Ceroc Word Wheel!\nI found ${count} words (${rank}) ${bonusText}\nCan you beat my score?`;
+            const shareText = `THE CEROC WORD WHEEL\nI found ${count} words (${rank}) ${bonusText}\nCan you beat my score? https://glowsocial-uk.github.io/ceroc-word-wheel/`;
 
             // Copy to clipboard using textarea + execCommand for maximum in-app browser compatibility
             const tempInput = document.createElement('textarea');
@@ -1015,13 +1002,13 @@
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
                 <div class="text-center">
-                    <div class="w-12 h-12 rounded-full bg-amber-100 text-orange-600 flex items-center justify-center mx-auto mb-2 text-2xl">
-                        <i class="ph-fill ph-check-circle"></i>
+                    <div class="inline-flex flex-col items-center mb-3">
+                        <h3 class="font-display text-4xl text-white uppercase leading-none">SCORE COPIED!</h3>
+                        <div class="w-full h-[2px] bg-white my-2"></div>
                     </div>
-                    <h3 class="font-display text-3xl text-slate-950">Score Copied!</h3>
-                    <p class="text-xs text-slate-600 mb-3">Paste this into the social media post comments to challenge your dance friends:</p>
-                    <div class="bg-slate-100 border border-slate-300 rounded-xl p-3 text-left text-xs font-mono text-slate-800 whitespace-pre-line mb-4">${shareText}</div>
-                    <button onclick="closeModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-extrabold text-sm shadow">
+                    <p class="text-xs text-ceroc-lightOrange mb-3">Paste this into the social media post comments to challenge your dance friends:</p>
+                    <div class="bg-white/10 border border-white/20 rounded-xl p-3 text-left text-xs font-mono text-white whitespace-pre-line mb-4">${shareText}</div>
+                    <button onclick="closeModal()" class="w-full py-2.5 rounded-lg bg-ceroc-highlight text-white font-bold text-xs uppercase tracking-wider shadow">
                         Back to Game
                     </button>
                 </div>
@@ -1033,28 +1020,21 @@
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
                 <div>
-                    <h3 class="font-display text-4xl text-center text-slate-950 border-b-2 border-slate-900 pb-1 mb-3">
-                        THE RULES
-                    </h3>
-                    <ul class="space-y-3 text-sm font-semibold text-slate-900 mb-5">
-                        <li class="flex items-start gap-2">
-                            <span class="text-orange-500 text-lg leading-none">✦</span>
-                            <span>Every word must contain the centre letter <strong class="text-orange-600">E</strong>.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-orange-500 text-lg leading-none">✦</span>
-                            <span>Words must be at least <strong>3 letters</strong> long.</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span class="text-orange-500 text-lg leading-none">✦</span>
-                            <span>You can only use each letter as many times as it appears in the wheel.</span>
-                        </li>
-                        <li class="flex items-start gap-2 bg-amber-100 border border-amber-400 p-2.5 rounded-xl">
-                            <span class="text-orange-600 text-lg leading-none">✦</span>
-                            <span><strong>BONUS CHALLENGE:</strong> Find the 9-letter word connected to Ceroc!</span>
-                        </li>
-                    </ul>
-                    <button onclick="closeModal()" class="w-full py-2.5 rounded-xl bg-slate-900 text-white font-extrabold text-sm">
+                    <div class="flex flex-col items-center mb-4">
+                        <div class="inline-flex flex-col items-center">
+                            <h3 class="font-display text-4xl text-white uppercase leading-none">THE RULES</h3>
+                            <div class="w-full h-[2px] bg-white my-2"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-xs sm:text-sm text-white/90 mb-5 leading-relaxed">
+                        <p>Every word must contain the centre letter <strong class="text-ceroc-lightOrange">E</strong>.</p>
+                        <p>Words must be at least <strong>3 letters</strong> long.</p>
+                        <p>You can only use each letter as many times as it appears in the wheel.</p>
+                        <p class="p-3 rounded-lg bg-ceroc-orange/15 border border-ceroc-orange text-ceroc-lightOrange font-semibold">
+                            <strong class="text-ceroc-orange uppercase">BONUS CHALLENGE:</strong> Find the 9-letter word connected to Ceroc!
+                        </p>
+                    </div>
+                    <button onclick="closeModal()" class="w-full py-2.5 rounded-lg bg-ceroc-highlight text-white font-bold text-xs uppercase tracking-wider">
                         Let's Play!
                     </button>
                 </div>
@@ -1066,13 +1046,16 @@
             const modalBody = document.getElementById('modalBody');
             modalBody.innerHTML = `
                 <div class="text-center">
-                    <h3 class="font-display text-3xl text-slate-950 mb-1">Reset Your Progress?</h3>
-                    <p class="text-xs text-slate-600 mb-4">This will clear your ${foundWords.length} found words so you can play fresh.</p>
-                    <div class="flex gap-2">
-                        <button onclick="closeModal()" class="flex-1 py-2.5 rounded-xl bg-slate-200 text-slate-800 font-bold text-xs">
+                    <div class="inline-flex flex-col items-center mb-2">
+                        <h3 class="font-display text-3xl text-white uppercase leading-none">RESET YOUR PROGRESS?</h3>
+                        <div class="w-full h-[2px] bg-white my-2"></div>
+                    </div>
+                    <p class="text-xs text-ceroc-lightOrange mb-5">This will clear your ${foundWords.length} found words so you can play fresh.</p>
+                    <div class="flex gap-2.5">
+                        <button onclick="closeModal()" class="flex-1 py-2.5 rounded-lg bg-white/10 hover:bg-white/15 text-white font-bold text-xs uppercase tracking-wider">
                             Cancel
                         </button>
-                        <button onclick="confirmResetGame()" class="flex-1 py-2.5 rounded-xl bg-red-600 text-white font-bold text-xs">
+                        <button onclick="confirmResetGame()" class="flex-1 py-2.5 rounded-lg bg-ceroc-highlight text-white font-bold text-xs uppercase tracking-wider">
                             Yes, Reset
                         </button>
                     </div>
@@ -1086,6 +1069,11 @@
             bonusUnlocked = false;
             selectedSequence = [];
             hintLevel = 0;
+            document.getElementById('bonusHintContainer').innerHTML = `
+                <button onclick="revealBonusHint()" id="hintBtn" class="text-xs bg-ceroc-orange/20 hover:bg-ceroc-orange/30 text-ceroc-lightOrange border border-ceroc-orange/50 px-2.5 py-1 rounded font-semibold uppercase tracking-wider transition">
+                    Need a Clue?
+                </button>
+            `;
             saveProgress();
             updateScoreAndUI();
             renderWheel();
@@ -1122,7 +1110,7 @@
                     r: Math.random() * 1.8 + 0.5,
                     alpha: Math.random(),
                     speed: (Math.random() * 0.015 + 0.005) * (Math.random() < 0.5 ? 1 : -1),
-                    gold: Math.random() > 0.35
+                    orange: Math.random() > 0.35
                 }));
             }
 
@@ -1136,8 +1124,8 @@
                     if (s.alpha >= 1 || s.alpha <= 0.15) s.speed = -s.speed;
                     ctx.beginPath();
                     ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                    ctx.fillStyle = s.gold
-                        ? `rgba(251, 191, 36, ${s.alpha.toFixed(2)})`
+                    ctx.fillStyle = s.orange
+                        ? `rgba(255, 169, 86, ${s.alpha.toFixed(2)})`
                         : `rgba(255, 255, 255, ${s.alpha.toFixed(2)})`;
                     ctx.fill();
                 }
@@ -1152,7 +1140,7 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
-            const colors = ['#fde047', '#f59e0b', '#ea580c', '#ffffff', '#fb923c'];
+            const colors = ['#F87B03', '#FFA956', '#FFFFFF', '#D6336C'];
             const pieces = Array.from({ length: count }, () => ({
                 x: canvas.width / 2 + (Math.random() - 0.5) * 180,
                 y: canvas.height / 2,
@@ -1170,7 +1158,7 @@
                 for (const p of pieces) {
                     p.x += p.vx;
                     p.y += p.vy;
-                    p.vy += 0.35; // gravity
+                    p.vy += 0.35;
                     p.rot += p.vRot;
                     if (p.y < canvas.height + 20) active = true;
 
