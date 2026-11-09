@@ -70,9 +70,12 @@
         }
 
         .font-display {
-            font-family: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+            font-family: 'Bebas Neue', 'Arial Narrow', sans-serif;
+            font-weight: 400 !important; /* Prevents browser faux-bolding */
             letter-spacing: 0.04em;
             text-transform: uppercase;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Layout Containers */
@@ -154,7 +157,7 @@
             font-size: clamp(2.6rem, 7vw, 4.2rem);
             line-height: 0.95;
             color: var(--ceroc-white);
-            font-weight: 700;
+            font-weight: 400; /* Crisp native Bebas Neue weight */
         }
 
         .title-underline {
